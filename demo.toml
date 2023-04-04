@@ -1,0 +1,13 @@
+[[questions]]
+prompt.program = """
+fn main() {
+    println!("Hello World!");
+}
+"""
+
+prompt.answer = "A"
+prompt.distractors = [
+  "B",
+  "C",
+  "D"
+]
