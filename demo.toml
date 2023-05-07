@@ -1,12 +1,14 @@
+theme = "GitHub"
+
 [[questions]]
-prompt.program = """
+program = """
 fn main() {
     println!("Hello World!");
 }
 """
 
-prompt.answer = "A"
-prompt.distractors = [
+answer = "A"
+distractors = [
   "B",
   "C",
   "D"
