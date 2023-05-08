@@ -1,12 +1,16 @@
 #![deny(clippy::use_self, unused_qualifications)]
 
 mod ir;
+mod traits;
 
 use std::iter::zip;
 
 use miette::{bail, Context, IntoDiagnostic, Result};
-use silicon::{assets::HighlightingAssets, formatter::ImageFormatterBuilder};
-use syntect::{easy::HighlightLines, util::LinesWithEndings};
+use silicon::assets::HighlightingAssets;
+use silicon::formatter::ImageFormatterBuilder;
+use syntect::easy::HighlightLines;
+
+use crate::traits::Highlight as _;
 
 fn main() -> Result<()> {
     let mut args = std::env::args().skip(1);
@@ -30,10 +34,7 @@ fn main() -> Result<()> {
                     .into_diagnostic()?
             };
 
-            let HighlightingAssets {
-                syntax_set,
-                theme_set,
-            } = HighlightingAssets::new();
+            let HighlightingAssets { syntax_set, theme_set } = HighlightingAssets::new();
 
             let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
             let theme = theme_set
@@ -43,10 +44,8 @@ fn main() -> Result<()> {
 
             let mut highlight_lines = HighlightLines::new(rust_syntax, theme);
             for (question, question_id) in zip(file.questions, 0_u32..) {
-                let lines = LinesWithEndings::from(&question.program)
-                    .map(|line| highlight_lines.highlight_line(line, &syntax_set))
-                    .collect::<Result<Vec<_>, _>>()
-                    .into_diagnostic()?;
+                let lines =
+                    highlight_lines.highlight0(&question.program, &syntax_set).into_diagnostic()?;
 
                 let image = formatter.format(&lines, theme);
                 let path = format!("./images/{question_id}.png");

@@ -479,6 +479,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "extension-trait"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dd65f1b59dd22d680c7a626cc4a000c1e03d241c51c3e034d2bc9f1e90734f9b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.13",
+]
+
+[[package]]
 name = "fastrand"
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1216,6 +1227,7 @@ dependencies = [
 name = "quiz"
 version = "0.1.0"
 dependencies = [
+ "extension-trait",
  "miette",
  "serde",
  "silicon",
