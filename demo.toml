@@ -1,6 +1,7 @@
 theme = "GitHub"
 
 [[questions]]
+title = "as"
 program = """
 fn main() {
     println!("Hello World!");

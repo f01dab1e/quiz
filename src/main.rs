@@ -5,6 +5,10 @@
 #[macro_use]
 mod helpers;
 mod commands;
+mod config;
+mod questions;
+
+pub use miette::Result;
 
 fn mk_aggregator() -> wca::CommandsAggregator {
     use wca::{Command, CommandsAggregator, Type};
@@ -12,10 +16,11 @@ fn mk_aggregator() -> wca::CommandsAggregator {
     use crate::helpers::routines;
 
     let commands = [
-        Command::former().phrase("import.from").subject("file", Type::String, false).form(),
+        Command::former().phrase("import.from").subject("file", Type::Path, true).form(),
         Command::former().phrase("questions.list").form(),
         Command::former().phrase("questions.about").form(),
-        Command::former().phrase("questions").form(), // TODO: .export
+        Command::former().phrase("questions").property("export", "lol", Type::Number, true).form(), // TODO: .export
+        Command::former().phrase("export").form(),
     ];
 
     CommandsAggregator::former()
@@ -31,7 +36,7 @@ fn mk_aggregator() -> wca::CommandsAggregator {
         .build()
 }
 
-fn main() -> miette::Result<()> {
+fn main() -> Result<()> {
     use itertools::Itertools as _;
     use miette::IntoDiagnostic as _;
 

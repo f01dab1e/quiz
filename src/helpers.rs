@@ -1,6 +1,6 @@
 use std::mem::MaybeUninit;
 
-use wca::{Args, Props, Routine};
+use wca::{Args, BasicError, Props, Routine};
 
 pub fn routines() -> Routines<0> {
     Routines::new()
@@ -20,12 +20,18 @@ impl<const N: usize> Routines<N> {
     pub fn routine(
         self,
         name: impl ToString,
-        callback: impl Fn(Args, Props) -> Result<(), wca::BasicError> + 'static,
+        callback: impl Fn(Args, Props) -> miette::Result<()> + 'static,
     ) -> Routines<{ N + 1 }> {
         Routines {
             routines: array_push(
                 self.routines,
-                (name.to_string(), Routine::new(move |(args, props)| callback(args, props))),
+                (
+                    name.to_string(),
+                    Routine::new(move |(args, props)| {
+                        callback(args, props)
+                            .map_err(|report| BasicError::new(format!("{report:?}")))
+                    }),
+                ),
             ),
         }
     }
