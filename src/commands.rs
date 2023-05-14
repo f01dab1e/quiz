@@ -1,17 +1,13 @@
-use std::fs::File;
-use std::iter::zip;
 use std::path::PathBuf;
 
-use itertools::Itertools;
-use miette::{Context, IntoDiagnostic};
-use syntect::easy::HighlightLines;
-use wca::{Args, Props, Value};
+use miette::{IntoDiagnostic as _, WrapErr as _};
+use wca::{Args, Props};
 
 use crate::config::Config;
-use crate::questions::Question;
-use crate::{questions, Result};
+use crate::questions::{Question, Questions};
+use crate::Result;
 
-pub fn import_from(args: Args, _props: Props) -> Result<()> {
+pub fn import_from(args: Args, _props: Props) -> Result {
     let mut conf = Config::from_home_dir()?;
 
     let mut args = args.0.into_iter();
@@ -20,31 +16,30 @@ pub fn import_from(args: Args, _props: Props) -> Result<()> {
     let path = path
         .canonicalize()
         .into_diagnostic()
-        .with_context(|| format!("reading `{}`", path.display()))?;
+        .with_context(|| format!("process file `{}`", path.display()))?;
 
     conf.paths.insert(path);
     conf.save()
 }
 
-pub fn questions_list(_args: Args, _props: Props) -> Result<()> {
+pub fn questions_list(_args: Args, _props: Props) -> Result {
     let conf = Config::from_home_dir()?;
-    dbg!(crate::questions::read(conf.paths)?);
+    dbg!(Questions::read(conf.paths)?);
     Ok(())
 }
 
-pub fn questions_about(_args: Args, _props: Props) -> Result<()> {
-    use prettytable::{row, Row, Table};
+pub fn questions_about(_args: Args, _props: Props) -> Result {
+    use prettytable::{row, Cell, Table};
 
     let conf = Config::from_home_dir()?;
-    let questions = questions::read(conf.paths)?;
+    let questions = Questions::read(conf.paths)?;
 
     let rows: Vec<_> = questions
         .into_iter()
-        .map(|question| Row::new(vec![(&question.title).into(), (&question.program).into()]))
+        .map(|question| row![Cell::from(&question.title), Cell::from(&question.program)])
         .collect();
 
     let mut table = Table::new();
-
     table.add_row(row!["Question", "Code"]);
     table.extend(rows);
     table.printstd();
@@ -52,19 +47,16 @@ pub fn questions_about(_args: Args, _props: Props) -> Result<()> {
     Ok(())
 }
 
-pub fn questions_export(_args: Args, props: Props) -> Result<()> {
+pub fn questions_export(_args: Args, _props: Props) -> Result {
     use std::io::Write as _;
 
     use silicon::assets::HighlightingAssets;
-    use silicon::formatter::ImageFormatterBuilder;
-    use syntect::util::LinesWithEndings;
 
     let config = Config::from_home_dir()?;
-    let questions = questions::read(config.paths)?;
-    let export = props.get("export").map_or(true, |n| n != &Value::Number(0.0));
+    let questions = Questions::read(config.paths)?;
 
     let mut formatter = {
-        ImageFormatterBuilder::new()
+        silicon::formatter::ImageFormatterBuilder::new()
             // fallback 'Hack; SimSun=31'
             .font(Vec::<(String, f32)>::new())
             .build()
@@ -79,24 +71,21 @@ pub fn questions_export(_args: Args, props: Props) -> Result<()> {
         .get(&config.theme)
         .ok_or_else(|| miette::miette!("Canot load the theme: {}", config.theme))?;
 
-    let mut highlight_lines = HighlightLines::new(rust_syntax, theme);
+    let mut writer = std::fs::File::create("output.md").into_diagnostic()?;
+    writer.write_all(b"# Rust Quiz").into_diagnostic()?;
 
-    if export {
-        let mut writer = File::create("output.md").into_diagnostic()?;
-        writer.write_all(b"# Rust Quiz").unwrap();
+    let mut highlight_lines = syntect::easy::HighlightLines::new(rust_syntax, theme);
+    for (question, question_id) in std::iter::zip(questions, 0_usize..) {
+        let lines = syntect::util::LinesWithEndings::from(&question.program)
+            .map(|line| highlight_lines.highlight_line(line, &syntax_set))
+            .collect::<Result<Vec<_>, _>>()
+            .into_diagnostic()?;
 
-        for (question, question_id) in zip(questions, 0_usize..) {
-            let lines = LinesWithEndings::from(&question.program)
-                .map(|line| highlight_lines.highlight_line(line, &syntax_set))
-                .collect::<Result<Vec<_>, _>>()
-                .into_diagnostic()?;
+        let image = formatter.format(&lines, theme);
+        let image_path = format!("{question_id}.png");
+        image.save(&image_path).into_diagnostic()?;
 
-            let image = formatter.format(&lines, theme);
-            let image_path = format!("{question_id}.png");
-            image.save(&image_path).into_diagnostic()?;
-
-            write_question(&mut writer, question, &image_path)?;
-        }
+        write_question(&mut writer, question, &image_path)?;
     }
 
     Ok(())
@@ -106,27 +95,23 @@ fn write_question(
     writer: &mut impl std::io::Write,
     question: Question,
     image_path: &str,
-) -> Result<()> {
-    let Question { title, program, answer, distractors } = question;
+) -> Result {
+    use itertools::Itertools as _;
 
-    let distractors = distractors
-        .into_iter()
-        .map(|distractor| lazy_format::lazy_format!("* {distractor}"))
-        .join("\n");
+    let Question { title, answer, distractors, .. } = question;
+    let distractors =
+        distractors.iter().map(|distractor| lazy_format::lazy_format!("* {distractor}")).join("\n");
 
-    writer
-        .write_fmt(format_args!(
-            r#"
+    write!(
+        writer,
+        r#"
 
 ## {title}
 
 ![]({image_path})
 
-```rust
-{program}```
-
 * {answer} :heavy_check_mark:
 {distractors}"#
-        ))
-        .into_diagnostic()
+    )
+    .into_diagnostic()
 }

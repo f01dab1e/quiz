@@ -14,6 +14,34 @@ pub struct Questions {
 }
 
 impl Questions {
+    pub fn read(paths: HashSet<PathBuf>) -> Result<Self> {
+        let mut questions = Self::default();
+
+        for path in paths {
+            questions.extend(Self::read0(path)?);
+        }
+
+        Ok(questions)
+    }
+
+    fn read0(path: PathBuf) -> Result<Self> {
+        let input = std::fs::read_to_string(&path)
+            .into_diagnostic()
+            .with_context(|| format!("reading `{}`", path.display()))?;
+
+        toml::from_str(&input).into_diagnostic()
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Question {
+    pub title: Str,
+    pub program: Str,
+    pub answer: Str,
+    pub distractors: Box<[Str]>,
+}
+
+impl Questions {
     fn extend(&mut self, other: Self) {
         self.questions.extend(other);
     }
@@ -28,28 +56,10 @@ impl IntoIterator for Questions {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Question {
-    pub title: Str,
-    pub program: Str,
-    pub answer: Str,
-    pub distractors: Vec<Str>,
-}
+#[cfg(all(target_arch = "x86_64", target_pointer_width = "64"))]
+mod size_asserts {
+    use super::*;
 
-pub fn read(paths: HashSet<PathBuf>) -> Result<Questions> {
-    let mut questions = Questions::default();
-
-    for path in paths {
-        questions.extend(read0(path)?);
-    }
-
-    Ok(questions)
-}
-
-fn read0(path: PathBuf) -> Result<Questions> {
-    let input = std::fs::read_to_string(&path)
-        .into_diagnostic()
-        .with_context(|| format!("reading `{}`", path.display()))?;
-
-    toml::from_str(&input).into_diagnostic()
+    static_assert_size!(Question, 64);
+    static_assert_size!(Questions, 24);
 }

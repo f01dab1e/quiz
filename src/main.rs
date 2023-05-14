@@ -3,40 +3,26 @@
 #![deny(clippy::use_self, unused_qualifications)]
 
 #[macro_use]
-mod helpers;
+mod stdx;
 mod commands;
 mod config;
 mod questions;
 
-pub use miette::Result;
+pub type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 
 fn mk_aggregator() -> wca::CommandsAggregator {
-    use wca::{Command, CommandsAggregator, Type};
+    use wca::Type;
 
-    use crate::helpers::routines;
-
-    let commands = [
-        Command::former().phrase("import.from").subject("file", Type::Path, true).form(),
-        Command::former().phrase("questions.list").form(),
-        Command::former().phrase("questions.about").form(),
-        Command::former().phrase("questions").property("export", "lol", Type::Number, true).form(), // TODO: .export
-        Command::former().phrase("export").form(),
-    ];
-
-    CommandsAggregator::former()
-        .grammar(commands)
-        .executor(
-            routines()
-                .routine("import.from", commands::import_from)
-                .routine("questions.list", commands::questions_list)
-                .routine("questions.about", commands::questions_about)
-                .routine("questions", commands::questions_export)
-                .build(),
-        )
+    crate::stdx::cli()
+        .command("import.from", commands::import_from)
+        .arg("file", Type::Path, false)
+        .command("questions.list", commands::questions_list)
+        .command("questions.about", commands::questions_about)
+        .command("questions", commands::questions_export)
         .build()
 }
 
-fn main() -> Result<()> {
+fn main() -> Result {
     use itertools::Itertools as _;
     use miette::IntoDiagnostic as _;
 
