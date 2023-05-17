@@ -37,15 +37,12 @@ pub struct Builder<F> {
 
 impl<F> Builder<F> {
     fn new(f: F) -> Self {
-        Self { handler: f, command: wca::Command::former().form() }
+        let name = itertools::join(name::<F>().split('_'), ".");
+
+        Self { handler: f, command: wca::Command::former().phrase(name).form() }
     }
 
-    fn name(mut self, name: impl ToString) -> Self {
-        self.command.phrase = name.to_string();
-        self
-    }
-
-    fn arg(mut self, hint: &str, tag: wca::Type) -> Self {
+    pub fn arg(mut self, hint: &str, tag: wca::Type) -> Self {
         self.command.subjects.push(wca::grammar::settings::ValueDescription {
             hint: hint.into(),
             kind: tag,
@@ -54,7 +51,7 @@ impl<F> Builder<F> {
         self
     }
 
-    fn properties<const N: usize>(mut self, properties: [Property; N]) -> Self {
+    pub fn properties<const N: usize>(mut self, properties: [Property; N]) -> Self {
         for property in properties {
             self.command.properties.insert(
                 property.name.to_owned(),
@@ -90,18 +87,15 @@ impl<F: Fn(wca::Args, wca::Props) -> crate::Result> IntoBuilder<F> for F {
 impl<const LEN: usize> CommandBuilder<LEN> {
     pub fn command<F: Fn(wca::Args, wca::Props) -> crate::Result + 'static>(
         self,
-        name: impl ToString,
         command: impl IntoBuilder<F>,
     ) -> CommandBuilder<{ LEN + 1 }> {
-        let name = name.to_string();
-
-        let Builder { handler, command } = command.into_builder().name(name.clone());
+        let Builder { handler, command } = command.into_builder();
         let handler = wca::Routine::new(move |(args, props)| {
             handler(args, props).map_err(|report| wca::BasicError::new(format!("{report:?}")))
         });
 
         CommandBuilder {
-            handlers: array_push(self.handlers, (name, handler)),
+            handlers: array_push(self.handlers, (command.phrase.clone(), handler)),
             commands: array_push(self.commands, command),
         }
     }
@@ -166,4 +160,9 @@ macro_rules! static_assert_size {
     ($ty:ty, $size:expr) => {
         const _: [(); $size] = [(); ::std::mem::size_of::<$ty>()];
     };
+}
+
+fn name<T>() -> &'static str {
+    let name = std::any::type_name::<T>();
+    name.rfind(':').map_or(name, |tail| &name[tail + 1..])
 }

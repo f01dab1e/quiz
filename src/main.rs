@@ -22,11 +22,11 @@ fn mk_aggregator() -> wca::CommandsAggregator {
     ];
 
     cli()
-        .command("import.from", commands::import_from.arg("file", Type::String))
-        .command("questions.list", commands::questions_list.properties(filter.clone()))
-        .command("questions.list", commands::questions_list.properties(filter.clone()))
-        .command("questions.about", commands::questions_about)
-        .command("questions", commands::questions_export)
+        .command(commands::import_from.arg("file", Type::String))
+        .command(commands::questions_list.properties(filter.clone()))
+        .command(commands::questions_list.properties(filter.clone()))
+        .command(commands::questions_about)
+        .command(commands::questions_export)
         .build()
 }
 
