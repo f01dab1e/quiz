@@ -84,7 +84,6 @@ pub fn questions_export(_args: Args, _props: Props) -> Result {
         let image = formatter.format(&lines, theme);
         let image_path = format!("{question_id}.png");
         image.save(&image_path).into_diagnostic()?;
-
         write_question(&mut writer, question, &image_path)?;
     }
 

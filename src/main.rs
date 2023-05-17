@@ -13,10 +13,18 @@ pub type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 fn mk_aggregator() -> wca::CommandsAggregator {
     use wca::Type;
 
-    crate::stdx::cli()
-        .command("import.from", commands::import_from)
-        .arg("file", Type::Path, false)
-        .command("questions.list", commands::questions_list)
+    use crate::stdx::{cli, CommandExt as _, Property};
+
+    let list = Type::List(Box::new(Type::String), ',');
+    let filter = [
+        Property { name: "has_tags", hint: "lol", tag: list.clone() },
+        Property { name: "no_tags", hint: "lol", tag: list },
+    ];
+
+    cli()
+        .command("import.from", commands::import_from.arg("file", Type::String))
+        .command("questions.list", commands::questions_list.properties(filter.clone()))
+        .command("questions.list", commands::questions_list.properties(filter.clone()))
         .command("questions.about", commands::questions_about)
         .command("questions", commands::questions_export)
         .build()
