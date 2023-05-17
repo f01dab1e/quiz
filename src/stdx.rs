@@ -119,16 +119,6 @@ fn array_push<const N: usize, T>(this: [T; N], item: T) -> [T; N + 1] {
     }
 }
 
-pub struct Bool<const B: bool> {}
-
-pub trait True {}
-
-impl True for Bool<true> {}
-
-pub trait False {}
-
-impl False for Bool<false> {}
-
 #[macro_export]
 macro_rules! parse_args {
     ($args:ident, mut $b:ident: $ty:ident $( $rest:tt )* ) => {
