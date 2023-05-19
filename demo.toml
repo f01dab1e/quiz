@@ -1,16 +1,19 @@
-theme = "GitHub"
-
 [[questions]]
-title = "as"
-program = """
-fn main() {
-    println!("Hello World!");
-}
-"""
+description = """
+At the end of this function, Rust will call drop on which variables
 
-answer = "A"
+```rust
+fn main() {
+  let s1 = String::from("a");
+  let s2 = String::from("b");
+  let s3 = s2;
+}
+```
+"""
+answer = "s1 and s3"
 distractors = [
-  "B",
-  "C",
-  "D"
+  "s1, s2, and s3",
+  "s2 and s3",
+  "s3"
 ]
+tags = ["rust"]

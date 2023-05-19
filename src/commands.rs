@@ -1,103 +1,91 @@
 use std::path::PathBuf;
 
+use itertools::Itertools as _;
 use miette::{IntoDiagnostic as _, WrapErr as _};
 use wca::{Args, Props};
 
-use crate::config::Config;
-use crate::questions::{Question, Questions};
-use crate::Result;
+use crate::{ir, Result, State};
 
-pub fn import_from(args: Args, _props: Props) -> Result {
-    let mut conf = Config::from_home_dir()?;
-
+pub(crate) fn import_from(State { db, .. }: &State, args: Args, _props: Props) -> Result {
     let mut args = args.0.into_iter();
     parse_args!(args, path: PathBuf);
 
-    let path = path
-        .canonicalize()
-        .into_diagnostic()
-        .with_context(|| format!("process file `{}`", path.display()))?;
+    let questions: ir::Questions = {
+        let input = std::fs::read_to_string(&path)
+            .into_diagnostic()
+            .with_context(|| format!("reading `{}`", path.display()))?;
 
-    conf.paths.insert(path);
-    conf.save()
-}
+        toml::from_str(&input).into_diagnostic()?
+    };
 
-pub fn questions_list(_args: Args, _props: Props) -> Result {
-    let conf = Config::from_home_dir()?;
-    dbg!(Questions::read(conf.paths)?);
+    for question in questions {
+        db.add_question(question).into_diagnostic()?;
+    }
+
     Ok(())
 }
 
-pub fn questions_about(_args: Args, _props: Props) -> Result {
-    use prettytable::{row, Cell, Table};
+pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, props: Props) -> Result {
+    let has_tags = props.get_owned("has_tags").unwrap_or_default();
+    let no_tags = props.get_owned("no_tags").unwrap_or_default();
 
-    let conf = Config::from_home_dir()?;
-    let questions = Questions::read(conf.paths)?;
+    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
 
-    let rows: Vec<_> = questions
-        .into_iter()
-        .map(|question| row![Cell::from(&question.title), Cell::from(&question.program)])
-        .collect();
+    for ir::Question { id, description, answer, distractors, .. } in questions {
+        let id = id.unwrap();
+        let description: String = description.chars().take(60).collect();
+        let distractors = distractors.join("\n");
+
+        println!("{id}. {description}\nAnswer:\n{answer}\nDistractors:\n{distractors}");
+    }
+
+    Ok(())
+}
+
+pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, props: Props) -> Result {
+    use prettytable::{row, Table};
+
+    let has_tags = props.get_owned("has_tags").unwrap_or_default();
+    let no_tags = props.get_owned("no_tags").unwrap_or_default();
 
     let mut table = Table::new();
-    table.add_row(row!["Question", "Code"]);
+    let mut rows = Vec::new();
+
+    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    for ir::Question { id, description, answer, distractors, .. } in questions {
+        let distractors = distractors.iter().join("\n");
+        rows.push(row![id.unwrap(), description, answer, distractors]);
+    }
+
+    table.add_row(row!["ID", "Description", "Answer", "Distractors"]);
     table.extend(rows);
     table.printstd();
 
     Ok(())
 }
 
-pub fn questions_export(_args: Args, _props: Props) -> Result {
+pub(crate) fn questions_export(State { db, .. }: &State, _args: Args, props: Props) -> Result {
     use std::io::Write as _;
-
-    use silicon::assets::HighlightingAssets;
-
-    let config = Config::from_home_dir()?;
-    let questions = Questions::read(config.paths)?;
-
-    let mut formatter = {
-        silicon::formatter::ImageFormatterBuilder::new()
-            // fallback 'Hack; SimSun=31'
-            .font(Vec::<(String, f32)>::new())
-            .build()
-            .into_diagnostic()?
-    };
-
-    let HighlightingAssets { syntax_set, theme_set } = HighlightingAssets::new();
-
-    let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
-    let theme = theme_set
-        .themes
-        .get(&config.theme)
-        .ok_or_else(|| miette::miette!("Canot load the theme: {}", config.theme))?;
 
     let mut writer = std::fs::File::create("output.md").into_diagnostic()?;
     writer.write_all(b"# Rust Quiz").into_diagnostic()?;
 
-    let mut highlight_lines = syntect::easy::HighlightLines::new(rust_syntax, theme);
-    for (question, question_id) in std::iter::zip(questions, 0_usize..) {
-        let lines = syntect::util::LinesWithEndings::from(&question.program)
-            .map(|line| highlight_lines.highlight_line(line, &syntax_set))
-            .collect::<Result<Vec<_>, _>>()
-            .into_diagnostic()?;
+    let has_tags = props.get_owned("has_tags").unwrap_or_default();
+    let no_tags = props.get_owned("no_tags").unwrap_or_default();
 
-        let image = formatter.format(&lines, theme);
-        let image_path = format!("{question_id}.png");
-        image.save(&image_path).into_diagnostic()?;
-        write_question(&mut writer, question, &image_path)?;
+    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    for question in questions {
+        write_question(&mut writer, question)?;
     }
 
     Ok(())
 }
 
-fn write_question(
-    writer: &mut impl std::io::Write,
-    question: Question,
-    image_path: &str,
-) -> Result {
+fn write_question(writer: &mut impl std::io::Write, question: ir::Question) -> Result {
     use itertools::Itertools as _;
 
-    let Question { title, answer, distractors, .. } = question;
+    let ir::Question { id, description, answer, distractors, .. } = question;
+    let id = id.unwrap();
     let distractors =
         distractors.iter().map(|distractor| lazy_format::lazy_format!("* {distractor}")).join("\n");
 
@@ -105,9 +93,9 @@ fn write_question(
         writer,
         r#"
 
-## {title}
+## {id} 
 
-![]({image_path})
+{description}
 
 * {answer} :heavy_check_mark:
 {distractors}"#

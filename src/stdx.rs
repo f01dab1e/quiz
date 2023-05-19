@@ -1,26 +1,27 @@
-pub fn cli() -> CommandBuilder<0> {
-    CommandBuilder::new()
+pub(crate) fn cli<T>(state: T) -> CommandBuilder<T, 0> {
+    CommandBuilder::with_state(state)
 }
 
-pub struct CommandBuilder<const N: usize> {
+pub(crate) struct CommandBuilder<T, const N: usize> {
+    state: T,
     commands: [wca::Command; N],
     handlers: [(String, wca::Routine); N],
 }
 
 #[derive(Clone)]
-pub struct Property<'a> {
-    pub name: &'a str,
-    pub hint: &'a str,
-    pub tag: wca::Type,
+pub(crate) struct Property<'a> {
+    pub(crate) name: &'a str,
+    pub(crate) hint: &'a str,
+    pub(crate) tag: wca::Type,
 }
 
-impl CommandBuilder<0> {
-    fn new() -> Self {
-        Self { handlers: [], commands: [] }
+impl<T> CommandBuilder<T, 0> {
+    fn with_state(state: T) -> Self {
+        Self { state, handlers: [], commands: [] }
     }
 }
 
-pub trait CommandExt: Sized {
+pub(crate) trait CommandExt<T>: Sized {
     fn arg(self, hint: &str, tag: wca::Type) -> Builder<Self> {
         Builder::new(self).arg(hint, tag)
     }
@@ -30,19 +31,19 @@ pub trait CommandExt: Sized {
     }
 }
 
-pub struct Builder<F> {
+pub(crate) struct Builder<F> {
     handler: F,
     command: wca::Command,
 }
 
 impl<F> Builder<F> {
-    fn new(f: F) -> Self {
+    fn new(handler: F) -> Self {
         let name = itertools::join(name::<F>().split('_'), ".");
 
-        Self { handler: f, command: wca::Command::former().phrase(name).form() }
+        Self { handler, command: wca::Command::former().phrase(name).form() }
     }
 
-    pub fn arg(mut self, hint: &str, tag: wca::Type) -> Self {
+    pub(crate) fn arg(mut self, hint: &str, tag: wca::Type) -> Self {
         self.command.subjects.push(wca::grammar::settings::ValueDescription {
             hint: hint.into(),
             kind: tag,
@@ -51,7 +52,7 @@ impl<F> Builder<F> {
         self
     }
 
-    pub fn properties<const N: usize>(mut self, properties: [Property; N]) -> Self {
+    pub(crate) fn properties<const N: usize>(mut self, properties: [Property; N]) -> Self {
         for property in properties {
             self.command.properties.insert(
                 property.name.to_owned(),
@@ -66,41 +67,44 @@ impl<F> Builder<F> {
     }
 }
 
-impl<F: Fn(wca::Args, wca::Props) -> crate::Result> CommandExt for F {}
+impl<F: Fn(T, wca::Args, wca::Props) -> crate::Result, T> CommandExt<T> for F {}
 
-pub trait IntoBuilder<F>: Sized {
+pub(crate) trait IntoBuilder<F, T>: Sized {
     fn into_builder(self) -> Builder<F>;
 }
 
-impl<F> IntoBuilder<F> for Builder<F> {
+impl<F, T> IntoBuilder<F, T> for Builder<F> {
     fn into_builder(self) -> Self {
         self
     }
 }
 
-impl<F: Fn(wca::Args, wca::Props) -> crate::Result> IntoBuilder<F> for F {
+impl<F: Fn(T, wca::Args, wca::Props) -> crate::Result, T> IntoBuilder<F, T> for F {
     fn into_builder(self) -> Builder<F> {
         Builder::new(self)
     }
 }
 
-impl<const LEN: usize> CommandBuilder<LEN> {
-    pub fn command<F: Fn(wca::Args, wca::Props) -> crate::Result + 'static>(
+impl<T: Copy + 'static, const LEN: usize> CommandBuilder<T, LEN> {
+    pub(crate) fn command<F: Fn(T, wca::Args, wca::Props) -> crate::Result + 'static>(
         self,
-        command: impl IntoBuilder<F>,
-    ) -> CommandBuilder<{ LEN + 1 }> {
+        command: impl IntoBuilder<F, T>,
+    ) -> CommandBuilder<T, { LEN + 1 }> {
         let Builder { handler, command } = command.into_builder();
+
         let handler = wca::Routine::new(move |(args, props)| {
-            handler(args, props).map_err(|report| wca::BasicError::new(format!("{report:?}")))
+            handler(self.state, args, props)
+                .map_err(|report| wca::BasicError::new(format!("{report:?}")))
         });
 
         CommandBuilder {
+            state: self.state,
             handlers: array_push(self.handlers, (command.phrase.clone(), handler)),
             commands: array_push(self.commands, command),
         }
     }
 
-    pub fn build(self) -> wca::CommandsAggregator {
+    pub(crate) fn build(self) -> wca::CommandsAggregator {
         wca::CommandsAggregator::former().grammar(self.commands).executor(self.handlers).build()
     }
 }
