@@ -4,6 +4,7 @@ use itertools::Itertools as _;
 use miette::{IntoDiagnostic as _, WrapErr as _};
 use wca::{Args, Props};
 
+use crate::db::Database as _;
 use crate::{ir, Result, State};
 
 pub(crate) fn import_from(State { db, .. }: &State, args: Args, _props: Props) -> Result {
@@ -59,7 +60,7 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, props: Prop
 
     table.add_row(row!["ID", "Description", "Answer", "Distractors"]);
     table.extend(rows);
-    table.printstd();
+    println!("{}", table);
 
     Ok(())
 }
@@ -101,4 +102,61 @@ fn write_question(writer: &mut impl std::io::Write, question: ir::Question) -> R
 {distractors}"#
     )
     .into_diagnostic()
+}
+
+#[cfg(test)]
+mod tests {
+    use std::sync::Arc;
+
+    use expect_test::{expect, Expect};
+
+    use crate::db::MockDb;
+    use crate::{commands, State};
+
+    #[allow(dead_code)]
+    struct World {
+        state: State,
+        args: wca::Args,
+        props: wca::Props,
+    }
+
+    impl Default for World {
+        fn default() -> Self {
+            Self {
+                state: State { config: <_>::default(), db: MockDb::default().into() },
+                args: wca::Args(<_>::default()),
+                props: wca::Props(<_>::default()),
+            }
+        }
+    }
+
+    impl World {
+        fn assert(
+            self,
+            handler: impl Fn(&State, wca::Args, wca::Props) -> crate::Result,
+            expect: Expect,
+        ) {
+            std::io::set_output_capture(Some(Default::default()));
+            handler(&self.state, self.args, self.props).unwrap();
+            let captured = std::io::set_output_capture(None).unwrap();
+
+            let captured = Arc::try_unwrap(captured).unwrap().into_inner().unwrap();
+            let captured = String::from_utf8(captured).unwrap();
+
+            expect.assert_eq(&captured)
+        }
+    }
+
+    #[test]
+    fn empty_table() {
+        World::default().assert(
+            commands::questions_about,
+            expect![[r#"
+            +----+-------------+--------+-------------+
+            | ID | Description | Answer | Distractors |
+            +----+-------------+--------+-------------+
+
+        "#]],
+        );
+    }
 }

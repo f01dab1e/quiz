@@ -7,7 +7,7 @@ use crate::Result;
 type Symbol = Box<str>;
 
 #[serde_inline_default]
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Default)]
 pub(crate) struct Config {
     #[serde_inline_default("GitHub".into())]
     pub(crate) theme: String,

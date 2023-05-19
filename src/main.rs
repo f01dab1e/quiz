@@ -1,5 +1,5 @@
 #![allow(incomplete_features)]
-#![feature(generic_const_exprs)]
+#![feature(generic_const_exprs, internal_output_capture)]
 #![deny(clippy::use_self, unused_qualifications, unreachable_pub)]
 
 #[macro_use]
@@ -14,7 +14,7 @@ pub(crate) type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 pub(crate) struct State {
     #[allow(dead_code)]
     pub(crate) config: ir::Config,
-    pub(crate) db: db::Database,
+    pub(crate) db: db::DatabaseImpl,
 }
 
 fn mk_aggregator(state: &'static State) -> wca::CommandsAggregator {
