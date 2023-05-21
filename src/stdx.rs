@@ -1,3 +1,5 @@
+use crate::ir::Symbol;
+
 pub(crate) fn cli<T>(state: T) -> CommandBuilder<T, 0> {
     CommandBuilder::with_state(state)
 }
@@ -159,4 +161,55 @@ macro_rules! static_assert_size {
 fn name<T>() -> &'static str {
     let name = std::any::type_name::<T>();
     name.rfind(':').map_or(name, |tail| &name[tail + 1..])
+}
+
+pub(crate) fn find_rust_code_blocks(text: &str) -> Vec<Symbol> {
+    lazy_regex::lazy_regex!(r"(?s)```rust\s*\n(.*?)\n\s*```")
+        .captures_iter(text)
+        .map(|item| item[1].into())
+        .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use itertools::Itertools;
+
+    use super::*;
+    use crate::test::expect;
+
+    #[test]
+    fn test_find_rust_code_blocks() {
+        let markdown = r#"
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+```
+
+```
+
+```zig
+const std = @import("std");
+
+pub fn main() !void {
+    const stdout = std.io.getStdOut().writer();
+    try stdout.print("Hello, {s}!\n", .{"world"});
+}
+```
+"#;
+
+        let blocks = find_rust_code_blocks(markdown)
+            .into_iter()
+            .enumerate()
+            .map(|(index, text)| lazy_format::lazy_format!("{index}: {text}"))
+            .join("\n");
+
+        expect![[r#"
+            0: fn main() {
+                println!("Hello, world!");
+            }"#]]
+        .assert_eq(&blocks);
+    }
 }

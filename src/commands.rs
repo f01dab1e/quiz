@@ -5,7 +5,7 @@ use miette::{IntoDiagnostic as _, WrapErr as _};
 use wca::{Args, Props};
 
 use crate::db::Database as _;
-use crate::{ir, Result, State};
+use crate::{ir, stdx, Result, State};
 
 pub(crate) fn import_from(State { db, .. }: &State, args: Args, _props: Props) -> Result {
     let mut args = args.0.into_iter();
@@ -65,8 +65,11 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, props: Prop
     Ok(())
 }
 
-pub(crate) fn questions_export(State { db, .. }: &State, _args: Args, props: Props) -> Result {
+pub(crate) fn questions_export(State { config, db }: &State, _args: Args, props: Props) -> Result {
     use std::io::Write as _;
+    use std::iter::zip;
+
+    use silicon::assets::HighlightingAssets;
 
     let mut writer = std::fs::File::create("output.md").into_diagnostic()?;
     writer.write_all(b"# Rust Quiz").into_diagnostic()?;
@@ -74,8 +77,40 @@ pub(crate) fn questions_export(State { db, .. }: &State, _args: Args, props: Pro
     let has_tags = props.get_owned("has_tags").unwrap_or_default();
     let no_tags = props.get_owned("no_tags").unwrap_or_default();
 
+    let mut formatter = {
+        silicon::formatter::ImageFormatterBuilder::new()
+            // fallback 'Hack; SimSun=31'
+            .font(Vec::<(String, f32)>::new())
+            .build()
+            .into_diagnostic()?
+    };
+
+    let HighlightingAssets { syntax_set, theme_set } = HighlightingAssets::new();
+
+    let theme = theme_set
+        .themes
+        .get(&config.theme)
+        .ok_or_else(|| miette::miette!("Canot load the theme: {}", config.theme))?;
+
+    let mut highlight_lines = {
+        let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
+
+        syntect::easy::HighlightLines::new(rust_syntax, theme)
+    };
+
     let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
     for question in questions {
+        for (code, index) in zip(stdx::find_rust_code_blocks(&question.description), 0_usize..) {
+            let lines = syntect::util::LinesWithEndings::from(&code)
+                .map(|line| highlight_lines.highlight_line(line, &syntax_set))
+                .collect::<Result<Vec<_>, _>>()
+                .into_diagnostic()?;
+
+            let image = formatter.format(&lines, theme);
+            let image_path = format!("{index}.png");
+            image.save(&image_path).into_diagnostic()?;
+        }
+
         write_question(&mut writer, question)?;
     }
 

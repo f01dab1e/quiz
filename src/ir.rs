@@ -4,7 +4,7 @@ use serde_inline_default::serde_inline_default;
 
 use crate::Result;
 
-type Symbol = Box<str>;
+pub(crate) type Symbol = Box<str>;
 
 #[serde_inline_default]
 #[derive(Deserialize, Serialize, Default)]
