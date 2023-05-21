@@ -106,46 +106,8 @@ fn write_question(writer: &mut impl std::io::Write, question: ir::Question) -> R
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
-
-    use expect_test::{expect, Expect};
-
-    use crate::db::MockDb;
-    use crate::{commands, State};
-
-    #[allow(dead_code)]
-    struct World {
-        state: State,
-        args: wca::Args,
-        props: wca::Props,
-    }
-
-    impl Default for World {
-        fn default() -> Self {
-            Self {
-                state: State { config: <_>::default(), db: MockDb::default().into() },
-                args: wca::Args(<_>::default()),
-                props: wca::Props(<_>::default()),
-            }
-        }
-    }
-
-    impl World {
-        fn assert(
-            self,
-            handler: impl Fn(&State, wca::Args, wca::Props) -> crate::Result,
-            expect: Expect,
-        ) {
-            std::io::set_output_capture(Some(Default::default()));
-            handler(&self.state, self.args, self.props).unwrap();
-            let captured = std::io::set_output_capture(None).unwrap();
-
-            let captured = Arc::try_unwrap(captured).unwrap().into_inner().unwrap();
-            let captured = String::from_utf8(captured).unwrap();
-
-            expect.assert_eq(&captured)
-        }
-    }
+    use crate::commands;
+    use crate::test::{expect, World};
 
     #[test]
     fn empty_table() {
@@ -157,6 +119,21 @@ mod tests {
             +----+-------------+--------+-------------+
 
         "#]],
+        );
+    }
+
+    #[test]
+    fn question_table() {
+        World::default().question("Memory safety in Rust", "Unsafe", &["Safe"]).assert(
+            commands::questions_about,
+            expect![[r#"
+                +----+-----------------------+--------+-------------+
+                | ID | Description           | Answer | Distractors |
+                +----+-----------------------+--------+-------------+
+                | 0  | Memory safety in Rust | Unsafe | Safe        |
+                +----+-----------------------+--------+-------------+
+
+            "#]],
         );
     }
 }

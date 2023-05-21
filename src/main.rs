@@ -8,6 +8,8 @@ mod commands;
 mod db;
 mod ir;
 mod path;
+#[cfg(test)]
+mod test;
 
 pub(crate) type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 

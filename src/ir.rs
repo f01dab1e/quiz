@@ -34,7 +34,7 @@ pub(crate) struct Questions {
     pub(crate) questions: Vec<Question>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub(crate) struct Question {
     pub(crate) id: Option<i64>,
     pub(crate) description: Symbol,
