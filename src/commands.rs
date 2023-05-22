@@ -65,13 +65,26 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, props: Prop
     Ok(())
 }
 
-pub(crate) fn questions_export(State { config, db }: &State, _args: Args, props: Props) -> Result {
+pub(crate) fn questions(state: &State, _args: Args, props: Props) -> Result {
+    let has_tags = props.get_owned("has_tags").unwrap_or_default();
+    let no_tags = props.get_owned("no_tags").unwrap_or_default();
+
+    let questions = state.questions(has_tags, no_tags)?;
+    println!("{:?}", questions);
+
+    Ok(())
+}
+
+pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
     use std::io::Write as _;
     use std::iter::zip;
 
     use silicon::assets::HighlightingAssets;
 
-    let mut writer = std::fs::File::create("output.md").into_diagnostic()?;
+    let mut args = args.0.into_iter();
+    parse_args!(args, path: PathBuf);
+
+    let mut writer = std::fs::File::create(path).into_diagnostic()?;
     writer.write_all(b"# Rust Quiz").into_diagnostic()?;
 
     let has_tags = props.get_owned("has_tags").unwrap_or_default();
@@ -89,8 +102,8 @@ pub(crate) fn questions_export(State { config, db }: &State, _args: Args, props:
 
     let theme = theme_set
         .themes
-        .get(&config.theme)
-        .ok_or_else(|| miette::miette!("Canot load the theme: {}", config.theme))?;
+        .get(&state.config.theme)
+        .ok_or_else(|| miette::miette!("Canot load the theme: {}", state.config.theme))?;
 
     let mut highlight_lines = {
         let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
@@ -98,7 +111,7 @@ pub(crate) fn questions_export(State { config, db }: &State, _args: Args, props:
         syntect::easy::HighlightLines::new(rust_syntax, theme)
     };
 
-    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    let questions = state.db.find_questions(has_tags, no_tags).into_diagnostic()?;
     for question in questions {
         for (code, index) in zip(stdx::find_rust_code_blocks(&question.description), 0_usize..) {
             let lines = syntect::util::LinesWithEndings::from(&code)

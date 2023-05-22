@@ -15,7 +15,11 @@ pub(crate) struct World {
 impl Default for World {
     fn default() -> Self {
         Self {
-            state: State { config: <_>::default(), db: Memory::default().into() },
+            state: State {
+                config: <_>::default(),
+                db: Memory::default().into(),
+                cache: anymap::AnyMap::new().into(),
+            },
             args: wca::Args(<_>::default()),
             props: wca::Props(<_>::default()),
         }

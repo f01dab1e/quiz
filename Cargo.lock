@@ -1217,6 +1217,7 @@ dependencies = [
 name = "lt_quiz"
 version = "0.1.0"
 dependencies = [
+ "anymap",
  "enum_dispatch",
  "expect-test",
  "home",

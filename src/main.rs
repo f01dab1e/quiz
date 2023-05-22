@@ -2,6 +2,9 @@
 #![feature(generic_const_exprs, internal_output_capture)]
 #![deny(clippy::use_self, unused_qualifications, unreachable_pub)]
 
+use db::Database;
+use miette::IntoDiagnostic;
+
 #[macro_use]
 mod stdx;
 mod commands;
@@ -14,9 +17,24 @@ mod test;
 pub(crate) type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 
 pub(crate) struct State {
-    #[allow(dead_code)]
     pub(crate) config: ir::Config,
     pub(crate) db: db::DatabaseImpl,
+    pub(crate) cache: std::cell::RefCell<anymap::AnyMap>,
+}
+
+impl State {
+    fn questions(&self, has_tags: Vec<String>, no_tags: Vec<String>) -> Result<Vec<ir::Question>> {
+        let mut cache = self.cache.borrow_mut();
+
+        match cache.get::<Vec<ir::Question>>() {
+            Some(questions) => Ok(questions.clone()),
+            None => {
+                let questions = self.db.find_questions(has_tags, no_tags).into_diagnostic()?;
+                cache.insert(questions.clone());
+                Ok(questions)
+            }
+        }
+    }
 }
 
 fn mk_aggregator(state: &'static State) -> wca::CommandsAggregator {
@@ -35,7 +53,8 @@ fn mk_aggregator(state: &'static State) -> wca::CommandsAggregator {
         .command(commands::questions_list.properties(filter.clone()))
         .command(commands::questions_list.properties(filter.clone()))
         .command(commands::questions_about.properties(filter.clone()))
-        .command(commands::questions_export.properties(filter))
+        .command(commands::questions.properties(filter.clone()))
+        .command(commands::export.arg("file", Type::Path).properties(filter))
         .build()
 }
 
@@ -44,8 +63,11 @@ fn main() -> Result {
     use miette::IntoDiagnostic as _;
 
     let state = {
-        let state =
-            State { config: ir::Config::from_home_dir()?, db: db::init().into_diagnostic()? };
+        let state = State {
+            config: ir::Config::from_home_dir()?,
+            db: db::init().into_diagnostic()?,
+            cache: anymap::AnyMap::new().into(),
+        };
         Box::leak(Box::new(state))
     };
 
