@@ -130,6 +130,12 @@ pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
     Ok(())
 }
 
+pub(crate) fn config(state: &State, _args: Args, _props: Props) -> Result {
+    println!("Theme: {}", state.config.theme);
+
+    Ok(())
+}
+
 fn write_question(writer: &mut impl std::io::Write, question: ir::Question) -> Result {
     use itertools::Itertools as _;
 
@@ -181,6 +187,16 @@ mod tests {
                 | 0  | Memory safety in Rust | Unsafe | Safe        |
                 +----+-----------------------+--------+-------------+
 
+            "#]],
+        );
+    }
+
+    #[test]
+    fn config() {
+        World::default().assert(
+            commands::config,
+            expect![[r#"
+                Theme: 
             "#]],
         );
     }

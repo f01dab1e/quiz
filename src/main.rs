@@ -55,6 +55,7 @@ fn mk_aggregator(state: &'static State) -> wca::CommandsAggregator {
         .command(commands::questions_about.properties(filter.clone()))
         .command(commands::questions.properties(filter.clone()))
         .command(commands::export.arg("file", Type::Path).properties(filter))
+        .command(commands::config)
         .build()
 }
 
