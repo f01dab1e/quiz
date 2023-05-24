@@ -3,7 +3,7 @@ use std::sync::Arc;
 pub(crate) use expect_test::{expect, Expect};
 
 use crate::db::{Database, Memory};
-use crate::{ir, State};
+use crate::{toml, State};
 
 #[allow(dead_code)]
 pub(crate) struct World {
@@ -31,7 +31,7 @@ impl World {
     pub(crate) fn question(self, description: &str, answer: &str, distractors: &[&str]) -> Self {
         self.state
             .db
-            .add_question(ir::Question {
+            .add_question(toml::Question {
                 id: None,
                 description: description.into(),
                 answer: answer.into(),

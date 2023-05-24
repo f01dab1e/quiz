@@ -5,18 +5,18 @@ use miette::{IntoDiagnostic as _, WrapErr as _};
 use wca::{Args, Props};
 
 use crate::db::Database as _;
-use crate::{ir, stdx, Result, State};
+use crate::{stdx, toml, Result, State};
 
 pub(crate) fn import_from(State { db, .. }: &State, args: Args, _props: Props) -> Result {
     let mut args = args.0.into_iter();
     parse_args!(args, path: PathBuf);
 
-    let questions: ir::Questions = {
+    let questions: toml::Questions = {
         let input = std::fs::read_to_string(&path)
             .into_diagnostic()
             .with_context(|| format!("reading `{}`", path.display()))?;
 
-        toml::from_str(&input).into_diagnostic()?
+        ::toml::from_str(&input).into_diagnostic()?
     };
 
     for question in questions {
@@ -32,7 +32,7 @@ pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, props: Props
 
     let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
 
-    for ir::Question { id, description, answer, distractors, .. } in questions {
+    for toml::Question { id, description, answer, distractors, .. } in questions {
         let id = id.unwrap();
         let description: String = description.chars().take(60).collect();
         let distractors = distractors.join("\n");
@@ -53,7 +53,7 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, props: Prop
     let mut rows = Vec::new();
 
     let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
-    for ir::Question { id, description, answer, distractors, .. } in questions {
+    for toml::Question { id, description, answer, distractors, .. } in questions {
         let distractors = distractors.iter().join("\n");
         rows.push(row![id.unwrap(), description, answer, distractors]);
     }
@@ -102,8 +102,8 @@ pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
 
     let theme = theme_set
         .themes
-        .get(&state.config.theme)
-        .ok_or_else(|| miette::miette!("Canot load the theme: {}", state.config.theme))?;
+        .get(&*state.config.theme)
+        .ok_or_else(|| miette::miette!("Canot load the theme: {}", *state.config.theme))?;
 
     let mut highlight_lines = {
         let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
@@ -131,15 +131,15 @@ pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
 }
 
 pub(crate) fn config(state: &State, _args: Args, _props: Props) -> Result {
-    println!("Theme: {}", state.config.theme);
+    println!("[{}] Theme: {}", state.config.theme.kind, *state.config.theme);
 
     Ok(())
 }
 
-fn write_question(writer: &mut impl std::io::Write, question: ir::Question) -> Result {
+fn write_question(writer: &mut impl std::io::Write, question: toml::Question) -> Result {
     use itertools::Itertools as _;
 
-    let ir::Question { id, description, answer, distractors, .. } = question;
+    let toml::Question { id, description, answer, distractors, .. } = question;
     let id = id.unwrap();
     let distractors =
         distractors.iter().map(|distractor| lazy_format::lazy_format!("* {distractor}")).join("\n");
@@ -196,7 +196,7 @@ mod tests {
         World::default().assert(
             commands::config,
             expect![[r#"
-                Theme: 
+                [default] Theme: GitHub
             "#]],
         );
     }

@@ -1,62 +1,69 @@
-use miette::{IntoDiagnostic as _, WrapErr as _};
-use serde::{Deserialize, Serialize};
-use serde_inline_default::serde_inline_default;
-
-use crate::Result;
+use crate::{toml, Result};
 
 pub(crate) type Symbol = Box<str>;
 
-#[serde_inline_default]
-#[derive(Deserialize, Serialize, Default)]
+pub(crate) struct Field<T> {
+    pub(crate) value: T,
+    pub(crate) kind: FieldKind,
+}
+
+impl<T> std::ops::Deref for Field<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.value
+    }
+}
+
+impl<T> Field<T> {
+    fn set(&mut self, value: T) {
+        self.value = value;
+        self.kind = FieldKind::User;
+    }
+
+    fn inherit(name: &str, value: T) -> Self {
+        Self { value, kind: FieldKind::Inherits(name.into()) }
+    }
+}
+
+pub(crate) enum FieldKind {
+    User,
+    Inherits(Symbol),
+}
+
+impl std::fmt::Display for FieldKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::User => f.write_str("user-defined"),
+            Self::Inherits(name) => f.write_str(name),
+        }
+    }
+}
+
 pub(crate) struct Config {
-    #[serde_inline_default("GitHub".into())]
-    pub(crate) theme: String,
+    pub(crate) theme: Field<String>,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        let profile: &str = "default";
+        Self { theme: Field::inherit(profile, "GitHub".into()) }
+    }
 }
 
 impl Config {
     pub(crate) fn from_home_dir() -> Result<Self> {
-        use std::io::ErrorKind;
-
-        let path = crate::path::config();
-        let input = match std::fs::read_to_string(&path) {
-            Err(err) if err.kind() == ErrorKind::NotFound => Ok(String::new()),
-            input => {
-                input.into_diagnostic().with_context(|| format!("reading `{}`", path.display()))
-            }
-        }?;
-
-        toml::from_str(&input).into_diagnostic()
+        let toml = toml::Config::from_home_dir()?;
+        Self::from_toml(toml)
     }
-}
 
-#[derive(Debug, Default, Deserialize, Serialize)]
-pub(crate) struct Questions {
-    pub(crate) questions: Vec<Question>,
-}
+    pub(crate) fn from_toml(toml: toml::Config) -> Result<Self> {
+        let mut default = Self::default();
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub(crate) struct Question {
-    pub(crate) id: Option<i64>,
-    pub(crate) description: Symbol,
-    pub(crate) answer: Symbol,
-    pub(crate) distractors: Box<[Symbol]>,
-    pub(crate) tags: Box<[Symbol]>,
-}
+        if let Some(theme) = toml.theme {
+            default.theme.set(theme);
+        }
 
-impl IntoIterator for Questions {
-    type Item = Question;
-    type IntoIter = std::vec::IntoIter<Self::Item>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.questions.into_iter()
+        Ok(default)
     }
-}
-
-#[cfg(all(target_arch = "x86_64", target_pointer_width = "64"))]
-mod size_asserts {
-    use super::*;
-
-    static_assert_size!(Config, 24);
-    static_assert_size!(Question, 80);
-    static_assert_size!(Questions, 24);
 }
