@@ -163,9 +163,36 @@ mod tests {
     use crate::commands;
     use crate::test::{expect, World};
 
+    fn empty() -> World {
+        World::default()
+    }
+
+    fn world() -> World {
+        World::default().question("Memory safety in Rust", "Unsafe", &["Safe"])
+    }
+
+    #[test]
+    fn empty_list() {
+        empty().assert(commands::questions_list, expect![]);
+    }
+
+    #[test]
+    fn question_list() {
+        world().assert(
+            commands::questions_list,
+            expect![[r#"
+                0. Memory safety in Rust
+                Answer:
+                Unsafe
+                Distractors:
+                Safe
+            "#]],
+        );
+    }
+
     #[test]
     fn empty_table() {
-        World::default().assert(
+        empty().assert(
             commands::questions_about,
             expect![[r#"
             +----+-------------+--------+-------------+
@@ -178,7 +205,7 @@ mod tests {
 
     #[test]
     fn question_table() {
-        World::default().question("Memory safety in Rust", "Unsafe", &["Safe"]).assert(
+        world().assert(
             commands::questions_about,
             expect![[r#"
                 +----+-----------------------+--------+-------------+
@@ -193,7 +220,7 @@ mod tests {
 
     #[test]
     fn config() {
-        World::default().assert(
+        empty().assert(
             commands::config,
             expect![[r#"
                 [default] Theme: GitHub

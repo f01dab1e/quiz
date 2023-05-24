@@ -172,13 +172,12 @@ pub(crate) fn find_rust_code_blocks(text: &str) -> Vec<Symbol> {
 
 #[cfg(test)]
 mod tests {
-    use itertools::Itertools;
+    use itertools::Itertools as _;
 
-    use super::*;
     use crate::test::expect;
 
     #[test]
-    fn test_find_rust_code_blocks() {
+    fn find_rust_code_blocks() {
         let markdown = r#"
 ```rust
 fn main() {
@@ -200,7 +199,7 @@ pub fn main() !void {
 ```
 "#;
 
-        let blocks = find_rust_code_blocks(markdown)
+        let blocks = super::find_rust_code_blocks(markdown)
             .into_iter()
             .enumerate()
             .map(|(index, text)| lazy_format::lazy_format!("{index}: {text}"))
