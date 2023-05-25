@@ -2,10 +2,11 @@ use std::path::PathBuf;
 
 use itertools::Itertools as _;
 use miette::{IntoDiagnostic as _, WrapErr as _};
+use stdx::parse_args;
 use wca::{Args, Props};
 
 use crate::db::Database as _;
-use crate::{stdx, toml, Result, State};
+use crate::{toml, Result, State};
 
 pub(crate) fn import_from(State { db, .. }: &State, args: Args, _props: Props) -> Result {
     let mut args = args.0.into_iter();

@@ -1,20 +1,8 @@
-//!
 //! lt-quiz
 
 #![allow(incomplete_features)]
 #![feature(generic_const_exprs, internal_output_capture)]
-#![deny(
-    clippy::use_self,
-    unused_qualifications,
-    unreachable_pub,
-    missing_debug_implementations,
-    missing_docs
-)]
-use db::Database;
-use miette::IntoDiagnostic;
 
-#[macro_use]
-mod stdx;
 mod commands;
 mod db;
 mod ir;
@@ -37,6 +25,10 @@ impl State {
         has_tags: Vec<String>,
         no_tags: Vec<String>,
     ) -> Result<Vec<toml::Question>> {
+        use miette::IntoDiagnostic as _;
+
+        use crate::db::Database as _;
+
         let mut cache = self.cache.borrow_mut();
 
         match cache.get::<Vec<toml::Question>>() {
@@ -51,9 +43,8 @@ impl State {
 }
 
 fn mk_aggregator(state: &'static State) -> wca::CommandsAggregator {
+    use stdx::{cli, CommandExt as _, Property};
     use wca::Type;
-
-    use crate::stdx::{cli, CommandExt as _, Property};
 
     let list = Type::List(Box::new(Type::String), ',');
     let filter = [

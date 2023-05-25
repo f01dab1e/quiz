@@ -50,6 +50,8 @@ impl IntoIterator for Questions {
 
 #[cfg(all(target_arch = "x86_64", target_pointer_width = "64"))]
 mod size_asserts {
+    use stdx::static_assert_size;
+
     use super::*;
 
     static_assert_size!(Config, 24);

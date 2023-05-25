@@ -1,0 +1,8 @@
+[build]
+rustflags = [
+    "-Dclippy::use_self",
+    "-Dunused_qualifications",
+    "-Dunreachable_pub",
+    "-Dmissing_debug_implementations",
+    "-Dmissing_docs"
+]
