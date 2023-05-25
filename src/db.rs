@@ -6,7 +6,7 @@ use rusqlite::{Connection, Result};
 
 pub(crate) use self::memory::Memory;
 pub(crate) use self::sqlite::Sqlite;
-use crate::ir;
+use crate::toml;
 
 pub(crate) fn init() -> Result<DatabaseImpl> {
     let db = Sqlite { conn: Connection::open(crate::path::db())? };
@@ -22,11 +22,11 @@ pub(crate) enum DatabaseImpl {
 
 #[enum_dispatch(DatabaseImpl)]
 pub(crate) trait Database {
-    fn add_question(&self, question: ir::Question) -> Result<()>;
+    fn add_question(&self, question: toml::Question) -> Result<()>;
     fn find_questions(
         &self,
         has_tags: Vec<String>,
         no_tags: Vec<String>,
-    ) -> Result<Vec<ir::Question>>;
+    ) -> Result<Vec<toml::Question>>;
     fn migrations(&self) -> Result<()>;
 }

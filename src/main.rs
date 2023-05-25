@@ -13,6 +13,7 @@ mod ir;
 mod path;
 #[cfg(test)]
 mod test;
+mod toml;
 
 pub(crate) type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 
@@ -23,10 +24,14 @@ pub(crate) struct State {
 }
 
 impl State {
-    fn questions(&self, has_tags: Vec<String>, no_tags: Vec<String>) -> Result<Vec<ir::Question>> {
+    fn questions(
+        &self,
+        has_tags: Vec<String>,
+        no_tags: Vec<String>,
+    ) -> Result<Vec<toml::Question>> {
         let mut cache = self.cache.borrow_mut();
 
-        match cache.get::<Vec<ir::Question>>() {
+        match cache.get::<Vec<toml::Question>>() {
             Some(questions) => Ok(questions.clone()),
             None => {
                 let questions = self.db.find_questions(has_tags, no_tags).into_diagnostic()?;

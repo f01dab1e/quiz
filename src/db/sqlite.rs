@@ -1,14 +1,14 @@
 use rusqlite::{self, params, Connection, Result};
 
 use super::Database;
-use crate::ir;
+use crate::toml;
 
 pub(crate) struct Sqlite {
     pub(crate) conn: Connection,
 }
 
 impl Database for Sqlite {
-    fn add_question(&self, question: ir::Question) -> Result<()> {
+    fn add_question(&self, question: toml::Question) -> Result<()> {
         let conn = &self.conn;
 
         let distractors = serde_json::to_string(&question.distractors).unwrap();
@@ -37,7 +37,7 @@ impl Database for Sqlite {
         &self,
         has_tags: Vec<String>,
         no_tags: Vec<String>,
-    ) -> Result<Vec<ir::Question>> {
+    ) -> Result<Vec<toml::Question>> {
         use std::fmt::Write as _;
 
         let conn = &self.conn;
@@ -70,7 +70,7 @@ impl Database for Sqlite {
                 serde_json::from_str(&json).unwrap()
             };
 
-            Ok(ir::Question {
+            Ok(toml::Question {
                 id: Some(id),
                 description,
                 answer,

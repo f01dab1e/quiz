@@ -2,15 +2,15 @@ use std::cell::RefCell;
 
 use rusqlite::Result;
 
-use crate::ir;
+use crate::toml;
 
 #[derive(Default)]
 pub(crate) struct Memory {
-    questions: RefCell<Vec<ir::Question>>,
+    questions: RefCell<Vec<toml::Question>>,
 }
 
 impl super::Database for Memory {
-    fn add_question(&self, mut question: ir::Question) -> Result<()> {
+    fn add_question(&self, mut question: toml::Question) -> Result<()> {
         let mut questions = self.questions.borrow_mut();
 
         question.id = Some(questions.len() as i64);
@@ -23,7 +23,7 @@ impl super::Database for Memory {
         &self,
         _has_tags: Vec<String>,
         _no_tags: Vec<String>,
-    ) -> Result<Vec<ir::Question>> {
+    ) -> Result<Vec<toml::Question>> {
         Ok(self.questions.borrow().to_vec())
     }
 
