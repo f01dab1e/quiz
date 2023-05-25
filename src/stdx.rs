@@ -125,6 +125,13 @@ fn array_push<const N: usize, T>(this: [T; N], item: T) -> [T; N + 1] {
     }
 }
 
+/// Macro for parsing WCA arguments.
+///
+/// # Examples
+/// ```rust,no_run
+/// let mut args = args.into_iter();
+/// parse_args(args, path: PathBuf)
+/// ```
 #[macro_export]
 macro_rules! parse_args {
     ($args:ident, mut $b:ident: $ty:ident $( $rest:tt )* ) => {
@@ -151,6 +158,8 @@ macro_rules! parse_args {
     };
 }
 
+/// Type size assertion. The first argument is a type and the second argument is
+/// its expected size.
 #[macro_export]
 macro_rules! static_assert_size {
     ($ty:ty, $size:expr) => {
@@ -172,13 +181,12 @@ pub(crate) fn find_rust_code_blocks(text: &str) -> Vec<Symbol> {
 
 #[cfg(test)]
 mod tests {
-    use itertools::Itertools;
+    use itertools::Itertools as _;
 
-    use super::*;
     use crate::test::expect;
 
     #[test]
-    fn test_find_rust_code_blocks() {
+    fn find_rust_code_blocks() {
         let markdown = r#"
 ```rust
 fn main() {
@@ -200,7 +208,7 @@ pub fn main() !void {
 ```
 "#;
 
-        let blocks = find_rust_code_blocks(markdown)
+        let blocks = super::find_rust_code_blocks(markdown)
             .into_iter()
             .enumerate()
             .map(|(index, text)| lazy_format::lazy_format!("{index}: {text}"))
