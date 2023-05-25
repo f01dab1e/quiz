@@ -1,6 +1,7 @@
 use crate::{toml, Result};
 
 pub(crate) type Symbol = Box<str>;
+pub(crate) type Markdown = Box<str>;
 
 pub(crate) struct Field<T> {
     pub(crate) value: T,
@@ -53,17 +54,16 @@ impl Default for Config {
 
 impl Config {
     pub(crate) fn from_home_dir() -> Result<Self> {
-        let toml = toml::Config::from_home_dir()?;
-        Self::from_toml(toml)
+        toml::Config::from_home_dir().map(Self::from_toml)
     }
 
-    pub(crate) fn from_toml(toml: toml::Config) -> Result<Self> {
-        let mut default = Self::default();
+    pub(crate) fn from_toml(toml: toml::Config) -> Self {
+        let mut config = Self::default();
 
         if let Some(theme) = toml.theme {
-            default.theme.set(theme);
+            config.theme.set(theme);
         }
 
-        Ok(default)
+        config
     }
 }

@@ -1,7 +1,7 @@
 use miette::{IntoDiagnostic as _, WrapErr as _};
 use serde::{Deserialize, Serialize};
 
-use crate::ir::Symbol;
+use crate::ir::{Markdown, Symbol};
 use crate::Result;
 
 #[derive(Deserialize, Serialize, Default)]
@@ -30,15 +30,6 @@ pub(crate) struct Questions {
     pub(crate) questions: Vec<Question>,
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub(crate) struct Question {
-    pub(crate) id: Option<i64>,
-    pub(crate) description: Symbol,
-    pub(crate) answer: Symbol,
-    pub(crate) distractors: Box<[Symbol]>,
-    pub(crate) tags: Box<[Symbol]>,
-}
-
 impl IntoIterator for Questions {
     type Item = Question;
     type IntoIter = std::vec::IntoIter<Self::Item>;
@@ -46,6 +37,15 @@ impl IntoIterator for Questions {
     fn into_iter(self) -> Self::IntoIter {
         self.questions.into_iter()
     }
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub(crate) struct Question {
+    pub(crate) id: Option<i64>,
+    pub(crate) description: Markdown,
+    pub(crate) answer: Symbol,
+    pub(crate) distractors: Box<[Markdown]>,
+    pub(crate) tags: Box<[Symbol]>,
 }
 
 #[cfg(all(target_arch = "x86_64", target_pointer_width = "64"))]

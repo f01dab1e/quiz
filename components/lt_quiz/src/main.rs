@@ -1,4 +1,4 @@
-//! lt-quiz
+//! lt_quiz
 
 #![allow(incomplete_features)]
 #![feature(generic_const_exprs, internal_output_capture)]
@@ -30,7 +30,6 @@ impl State {
         use crate::db::Database as _;
 
         let mut cache = self.cache.borrow_mut();
-
         match cache.get::<Vec<toml::Question>>() {
             Some(questions) => Ok(questions.clone()),
             None => {
