@@ -125,6 +125,13 @@ fn array_push<const N: usize, T>(this: [T; N], item: T) -> [T; N + 1] {
     }
 }
 
+/// Macro for parsing WCA arguments.
+///
+/// # Examples
+/// ```rust,no_run
+/// let mut args = args.into_iter();
+/// parse_args(args, path: PathBuf)
+/// ```
 #[macro_export]
 macro_rules! parse_args {
     ($args:ident, mut $b:ident: $ty:ident $( $rest:tt )* ) => {
@@ -151,6 +158,8 @@ macro_rules! parse_args {
     };
 }
 
+/// Type size assertion. The first argument is a type and the second argument is
+/// its expected size.
 #[macro_export]
 macro_rules! static_assert_size {
     ($ty:ty, $size:expr) => {

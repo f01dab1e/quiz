@@ -1,7 +1,15 @@
+//!
+//! lt-quiz
+
 #![allow(incomplete_features)]
 #![feature(generic_const_exprs, internal_output_capture)]
-#![deny(clippy::use_self, unused_qualifications, unreachable_pub)]
-
+#![deny(
+    clippy::use_self,
+    unused_qualifications,
+    unreachable_pub,
+    missing_debug_implementations,
+    missing_docs
+)]
 use db::Database;
 use miette::IntoDiagnostic;
 
