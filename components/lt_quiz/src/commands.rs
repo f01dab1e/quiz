@@ -1,12 +1,13 @@
 use std::path::PathBuf;
 
 use itertools::Itertools as _;
+use lt_quiz_core::traits::Database as _;
 use miette::{IntoDiagnostic as _, WrapErr as _};
 use stdx::parse_args;
 use wca::{Args, Props};
 
-use crate::db::Database as _;
-use crate::{toml, Result, State};
+use crate::state::State;
+use crate::{toml, Result};
 
 pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Props) -> Result {
     let mut args = args.0.into_iter();
@@ -20,7 +21,7 @@ pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Pro
         ::toml::from_str(&input).into_diagnostic()?
     };
 
-    db.add_questions(questions).into_diagnostic()
+    lt_quiz_core::commands::import_from(db, questions)
 }
 
 pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, properties: Props) -> Result {
@@ -178,12 +179,12 @@ mod tests {
         world().assert(
             commands::questions_list,
             expect![[r#"
-                0. Memory safety in Rust
-                Answer:
-                Unsafe
-                Distractors:
-                Safe
-            "#]],
+            1. Memory safety in Rust
+            Answer:
+            Unsafe
+            Distractors:
+            Safe
+        "#]],
         );
     }
 
@@ -208,7 +209,7 @@ mod tests {
                 +----+-----------------------+--------+-------------+
                 | ID | Description           | Answer | Distractors |
                 +----+-----------------------+--------+-------------+
-                | 0  | Memory safety in Rust | Unsafe | Safe        |
+                | 1  | Memory safety in Rust | Unsafe | Safe        |
                 +----+-----------------------+--------+-------------+
 
             "#]],

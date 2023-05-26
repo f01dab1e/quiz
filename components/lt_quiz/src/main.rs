@@ -6,41 +6,14 @@
 mod commands;
 mod db;
 mod ir;
+mod state;
 #[cfg(test)]
 mod test;
 
 use lt_quiz_core::toml;
 pub(crate) use stdx::Result;
 
-pub(crate) struct State {
-    pub(crate) config: ir::Config,
-    pub(crate) db: db::DatabaseImpl,
-    pub(crate) cache: std::cell::RefCell<anymap::AnyMap>,
-}
-
-impl State {
-    fn questions(
-        &self,
-        has_tags: Vec<String>,
-        no_tags: Vec<String>,
-    ) -> Result<Vec<toml::Question>> {
-        use miette::IntoDiagnostic as _;
-
-        use crate::db::Database as _;
-
-        let mut cache = self.cache.borrow_mut();
-        match cache.get::<Vec<toml::Question>>() {
-            Some(questions) => Ok(questions.clone()),
-            None => {
-                let questions = self.db.find_questions(has_tags, no_tags).into_diagnostic()?;
-                cache.insert(questions.clone());
-                Ok(questions)
-            }
-        }
-    }
-}
-
-fn mk_aggregator(state: &'static State) -> wca::CommandsAggregator {
+fn mk_aggregator(state: &'static state::State) -> wca::CommandsAggregator {
     use stdx::{cli, CommandExt as _, Property};
     use wca::Type;
 
@@ -66,7 +39,7 @@ fn main() -> Result {
     use miette::IntoDiagnostic as _;
 
     let state = {
-        let state = State {
+        let state = state::State {
             config: ir::Config::from_home_dir()?,
             db: db::init().into_diagnostic()?,
             cache: anymap::AnyMap::new().into(),

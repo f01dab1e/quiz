@@ -1,9 +1,10 @@
 use std::sync::Arc;
 
 pub(crate) use expect_test::{expect, Expect};
+use lt_quiz_core::traits::Database as _;
 
-use crate::db::{Database, Memory};
-use crate::{toml, State};
+use crate::state::State;
+use crate::toml;
 
 #[allow(dead_code)]
 pub(crate) struct World {
@@ -17,7 +18,7 @@ impl Default for World {
         Self {
             state: State {
                 config: <_>::default(),
-                db: Memory::default().into(),
+                db: crate::db::Sqlite::memory().into(),
                 cache: anymap::AnyMap::new().into(),
             },
             args: wca::Args(<_>::default()),
@@ -36,7 +37,7 @@ impl World {
                 description: description.into(),
                 answer: answer.into(),
                 distractors: distractors.iter().copied().map(Box::from).collect(),
-                tags: <_>::default(),
+                tags: vec!["tag".into()].into_boxed_slice(),
             })
             .unwrap();
 

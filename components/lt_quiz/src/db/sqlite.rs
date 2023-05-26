@@ -1,10 +1,19 @@
+use lt_quiz_core::traits::Database;
 use rusqlite::{self, params, Connection, Result};
 
-use super::Database;
 use crate::toml;
 
 pub(crate) struct Sqlite {
     pub(crate) conn: Connection,
+}
+
+impl Sqlite {
+    #[cfg(test)]
+    pub(crate) fn memory() -> Self {
+        let sqlite = Sqlite { conn: Connection::open_in_memory().unwrap() };
+        sqlite.migrations().unwrap();
+        sqlite
+    }
 }
 
 impl Database for Sqlite {
