@@ -6,12 +6,11 @@
 mod commands;
 mod db;
 mod ir;
-mod path;
 #[cfg(test)]
 mod test;
-mod toml;
 
-pub(crate) type Result<T = (), E = miette::Report> = miette::Result<T, E>;
+use lt_quiz_core::toml;
+pub(crate) use stdx::Result;
 
 pub(crate) struct State {
     pub(crate) config: ir::Config,

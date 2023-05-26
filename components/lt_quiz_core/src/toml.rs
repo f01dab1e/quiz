@@ -1,16 +1,14 @@
 use miette::{IntoDiagnostic as _, WrapErr as _};
 use serde::{Deserialize, Serialize};
+use stdx::Result;
 
-use crate::ir::{Markdown, Symbol};
-use crate::Result;
-
-#[derive(Deserialize, Serialize, Default)]
-pub(crate) struct Config {
-    pub(crate) theme: Option<String>,
+#[derive(Debug, Deserialize, Serialize, Default)]
+pub struct Config {
+    pub theme: Option<String>,
 }
 
 impl Config {
-    pub(crate) fn from_home_dir() -> Result<Self> {
+    pub fn from_home_dir() -> Result<Self> {
         use std::io::ErrorKind;
 
         let path = crate::path::config();
@@ -21,12 +19,12 @@ impl Config {
             }
         }?;
 
-        toml::from_str(&input).into_diagnostic()
+        ::toml::from_str(&input).into_diagnostic()
     }
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
-pub(crate) struct Questions {
+pub struct Questions {
     pub(crate) questions: Vec<Question>,
 }
 
@@ -40,12 +38,12 @@ impl IntoIterator for Questions {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-pub(crate) struct Question {
-    pub(crate) id: Option<i64>,
-    pub(crate) description: Markdown,
-    pub(crate) answer: Symbol,
-    pub(crate) distractors: Box<[Markdown]>,
-    pub(crate) tags: Box<[Symbol]>,
+pub struct Question {
+    pub id: Option<i64>,
+    pub description: Box<str>,
+    pub answer: Box<str>,
+    pub distractors: Box<[Box<str>]>,
+    pub tags: Box<[Box<str>]>,
 }
 
 #[cfg(all(target_arch = "x86_64", target_pointer_width = "64"))]

@@ -1,7 +1,6 @@
 use crate::{toml, Result};
 
 pub(crate) type Symbol = Box<str>;
-pub(crate) type Markdown = Box<str>;
 
 pub(crate) struct Field<T> {
     pub(crate) value: T,

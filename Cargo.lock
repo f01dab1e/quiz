@@ -1224,6 +1224,7 @@ dependencies = [
  "itertools",
  "lazy-regex",
  "lazy_format",
+ "lt_quiz_core",
  "miette",
  "prettytable-rs",
  "rusqlite",
@@ -1235,6 +1236,18 @@ dependencies = [
  "syntect",
  "toml",
  "wca",
+]
+
+[[package]]
+name = "lt_quiz_core"
+version = "0.1.0"
+dependencies = [
+ "home",
+ "miette",
+ "rusqlite",
+ "serde",
+ "stdx",
+ "toml",
 ]
 
 [[package]]

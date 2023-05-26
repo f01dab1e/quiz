@@ -11,7 +11,7 @@ pub use ir::{CommandBuilder, Property};
 pub use traits::{CommandExt, IntoBuilder};
 
 #[allow(missing_docs)]
-pub type Result = miette::Result<()>;
+pub type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 
 #[allow(missing_docs)]
 pub fn cli<T>(state: T) -> CommandBuilder<T, 0> {

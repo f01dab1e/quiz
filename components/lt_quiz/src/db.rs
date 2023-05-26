@@ -9,7 +9,7 @@ pub(crate) use self::sqlite::Sqlite;
 use crate::toml;
 
 pub(crate) fn init() -> Result<DatabaseImpl> {
-    let db = Sqlite { conn: Connection::open(crate::path::db())? };
+    let db = Sqlite { conn: Connection::open(lt_quiz_core::path::db())? };
     db.migrations()?;
     Ok(db.into())
 }

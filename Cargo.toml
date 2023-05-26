@@ -2,6 +2,8 @@
 members = ["./components/*"]
 
 [workspace.dependencies]
+stdx = { path = "./components/stdx" }
+
 wca = { version = "0.1", git = "https://github.com/Barsik-sus/wTools.git", branch = "ca_dot_command_merged" }
 lazy_format = "2.0"
 itertools = "0.10"

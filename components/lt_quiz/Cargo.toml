@@ -9,7 +9,8 @@ wca.workspace = true
 itertools.workspace = true
 lazy_format.workspace = true
 miette.workspace = true
-stdx = { path = "../stdx" }
+stdx.workspace = true
+lt_quiz_core = { path = "../lt_quiz_core" }
 
 home = "0.5"
 prettytable-rs = "0.10"
