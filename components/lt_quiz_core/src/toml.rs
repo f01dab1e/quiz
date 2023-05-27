@@ -2,12 +2,22 @@ use miette::{IntoDiagnostic as _, WrapErr as _};
 use serde::{Deserialize, Serialize};
 use stdx::Result;
 
+/// Configuration structure for the application.
 #[derive(Debug, Deserialize, Serialize, Default)]
 pub struct Config {
+    /// Represents the selected theme for code photos.
     pub theme: Option<String>,
 }
 
 impl Config {
+    /// Loads the configuration from the home directory.
+    ///
+    /// This function reads the configuration file from the home directory using
+    /// the `config` path from the `path` module. It attempts to read the
+    /// file and parse its contents as TOML format. If the file does not
+    /// exist, an empty string is used as the input. The function returns the
+    /// deserialized configuration as a `Result`, transformed into a diagnostic
+    /// error if necessary.
     pub fn from_home_dir() -> Result<Self> {
         use std::io::ErrorKind;
 
@@ -23,6 +33,7 @@ impl Config {
     }
 }
 
+/// Represents a collection of questions.
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Questions {
     pub(crate) questions: Vec<Question>,
@@ -37,12 +48,18 @@ impl IntoIterator for Questions {
     }
 }
 
+/// Represents a question.
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Question {
+    /// The optional ID of the question.
     pub id: Option<i64>,
+    /// The description of the question.
     pub description: Box<str>,
+    /// The answer to the question.
     pub answer: Box<str>,
+    /// The distractor options for the question.
     pub distractors: Box<[Box<str>]>,
+    /// The tags associated with the question.
     pub tags: Box<[Box<str>]>,
 }
 

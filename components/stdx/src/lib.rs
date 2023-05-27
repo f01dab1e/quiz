@@ -10,15 +10,18 @@ mod traits;
 pub use ir::{CommandBuilder, Property};
 pub use traits::{CommandExt, IntoBuilder};
 
-#[allow(missing_docs)]
+/// A type alias for `miette::Result<T, E>`.
 pub type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 
-#[allow(missing_docs)]
+/// Creates a command-line interface (CLI) builder with the given initial state.
+///
+/// This function initializes a `CommandBuilder` with the provided `state` and
+/// returns it for further configuration of the CLI.
 pub fn cli<T>(state: T) -> CommandBuilder<T, 0> {
     CommandBuilder::with_state(state)
 }
 
-#[allow(missing_docs)]
+/// Finds rust code blocks in the given markdown text.
 pub fn find_rust_code_blocks(text: &str) -> Vec<Box<str>> {
     lazy_regex::lazy_regex!(r"(?s)```rust\s*\n(.*?)\n\s*```")
         .captures_iter(text)

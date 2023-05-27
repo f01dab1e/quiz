@@ -1,12 +1,17 @@
 use crate::ir::{Builder, Property};
 use crate::Result;
 
-#[allow(missing_docs)]
+/// An extension trait for commands.
+///
+/// This trait provides additional methods for enhancing commands, such as
+/// adding arguments and properties.
 pub trait CommandExt<T>: Sized {
+    /// Adds an argument to the command.
     fn arg(self, hint: &str, tag: wca::Type) -> Builder<Self> {
         Builder::new(self).arg(hint, tag)
     }
 
+    /// Adds properties to the command.
     fn properties<const N: usize>(self, properties: [Property; N]) -> Builder<Self> {
         Builder::new(self).properties(properties)
     }
@@ -14,8 +19,9 @@ pub trait CommandExt<T>: Sized {
 
 impl<F: Fn(T, wca::Args, wca::Props) -> Result, T> CommandExt<T> for F {}
 
-#[allow(missing_docs)]
+/// A trait for converting a type into a `Builder`.
 pub trait IntoBuilder<F, T>: Sized {
+    /// Converts the type into a `Builder` instance.
     fn into_builder(self) -> Builder<F>;
 }
 

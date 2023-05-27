@@ -3,16 +3,19 @@ use itertools::Itertools;
 use crate::traits::IntoBuilder;
 use crate::Result;
 
+/// A struct representing a property.
 #[derive(Debug, Clone)]
-#[allow(missing_docs)]
 pub struct Property<'a> {
+    /// The name of the property.
     pub name: &'a str,
+    /// The hint for the property.
     pub hint: &'a str,
+    /// The tag representing the property's type.
     pub tag: wca::Type,
 }
 
+/// A builder struct for constructing commands.
 #[derive(Debug)]
-#[allow(missing_docs)]
 pub struct CommandBuilder<T, const N: usize> {
     state: T,
     commands: [wca::Command; N],
@@ -20,7 +23,7 @@ pub struct CommandBuilder<T, const N: usize> {
 }
 
 impl<T> CommandBuilder<T, 0> {
-    #[allow(missing_docs)]
+    /// Constructs a `CommandBuilder` with the given state.
     pub fn with_state(state: T) -> Self {
         Self { state, handlers: [], commands: [] }
     }
@@ -67,7 +70,7 @@ impl<F> Builder<F> {
 }
 
 impl<T: Copy + 'static, const LEN: usize> CommandBuilder<T, LEN> {
-    #[allow(missing_docs)]
+    /// Adds a command to the `CommandBuilder`.
     pub fn command<F: Fn(T, wca::Args, wca::Props) -> Result + 'static>(
         self,
         command: impl IntoBuilder<F, T>,
@@ -86,7 +89,11 @@ impl<T: Copy + 'static, const LEN: usize> CommandBuilder<T, LEN> {
         }
     }
 
-    #[allow(missing_docs)]
+    /// Builds and returns a `wca::CommandsAggregator` instance.
+    ///
+    /// This method finalizes the construction of the `CommandBuilder` by
+    /// creating a `wca::CommandsAggregator` instance with the accumulated
+    /// commands and handlers.
     pub fn build(self) -> wca::CommandsAggregator {
         wca::CommandsAggregator::former().grammar(self.commands).executor(self.handlers).build()
     }
