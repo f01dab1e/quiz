@@ -1,7 +1,5 @@
 //! lt_quiz_core
 
-/// Module containing command-related functionality.
-pub mod commands;
 /// Module containing path-related utilities.
 pub mod path;
 /// Module for working with TOML files.

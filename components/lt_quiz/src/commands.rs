@@ -21,7 +21,7 @@ pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Pro
         ::toml::from_str(&input).into_diagnostic()?
     };
 
-    lt_quiz_core::commands::import_from(db, questions)
+    db.add_questions(questions).into_diagnostic()
 }
 
 pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, properties: Props) -> Result {
