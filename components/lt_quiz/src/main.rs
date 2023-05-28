@@ -40,7 +40,7 @@ fn main() -> Result {
     let state = {
         let state = state::State {
             config: lt_quiz_core::ir::Config::from_home_dir()?,
-            db: db::init().into_diagnostic()?,
+            db: db::init()?,
             cache: anymap::AnyMap::new().into(),
         };
         Box::leak(Box::new(state))

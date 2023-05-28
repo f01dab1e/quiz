@@ -1,13 +1,13 @@
-use rusqlite::Result;
+use stdx::Result;
 
 use crate::toml;
 
 /// Database trait for managing questions.
 pub trait Database {
     /// Adds a single question to the database.
-    fn add_question(&self, question: toml::Question) -> Result<()>;
+    fn add_question(&self, question: toml::Question) -> Result;
     /// Adds multiple questions to the database.
-    fn add_questions(&self, questions: toml::Questions) -> Result<()> {
+    fn add_questions(&self, questions: toml::Questions) -> Result {
         for question in questions {
             self.add_question(question)?;
         }
@@ -22,5 +22,5 @@ pub trait Database {
     ) -> Result<Vec<toml::Question>>;
 
     /// Performs any necessary database migrations.
-    fn migrations(&self) -> Result<()>;
+    fn migrations(&self) -> Result;
 }

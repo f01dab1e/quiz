@@ -21,14 +21,14 @@ pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Pro
         ::toml::from_str(&input).into_diagnostic()?
     };
 
-    db.add_questions(questions).into_diagnostic()
+    db.add_questions(questions)
 }
 
 pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, properties: Props) -> Result {
     let has_tags = properties.get_owned("has_tags").unwrap_or_default();
     let no_tags = properties.get_owned("no_tags").unwrap_or_default();
 
-    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    let questions = db.find_questions(has_tags, no_tags)?;
 
     for toml::Question { id, description, answer, distractors, .. } in questions {
         let id = id.unwrap();
@@ -50,7 +50,7 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, properties:
     let mut table = Table::new();
     let mut rows = Vec::new();
 
-    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    let questions = db.find_questions(has_tags, no_tags)?;
     for toml::Question { id, description, answer, distractors, .. } in questions {
         let distractors = distractors.iter().join("\n");
         rows.push(row![id.unwrap(), description, answer, distractors]);
@@ -109,7 +109,7 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
         syntect::easy::HighlightLines::new(rust_syntax, theme)
     };
 
-    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    let questions = db.find_questions(has_tags, no_tags)?;
     for question in questions {
         for (code, index) in zip(stdx::find_rust_code_blocks(&question.description), 0_usize..) {
             let lines = syntect::util::LinesWithEndings::from(&code)

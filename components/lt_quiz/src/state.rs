@@ -15,13 +15,12 @@ impl State {
         no_tags: Vec<String>,
     ) -> Result<Vec<toml::Question>> {
         use lt_quiz_core::traits::Database as _;
-        use miette::IntoDiagnostic as _;
 
         let mut cache = self.cache.borrow_mut();
         match cache.get::<Vec<toml::Question>>() {
             Some(questions) => Ok(questions.clone()),
             None => {
-                let questions = self.db.find_questions(has_tags, no_tags).into_diagnostic()?;
+                let questions = self.db.find_questions(has_tags, no_tags)?;
                 cache.insert(questions.clone());
                 Ok(questions)
             }

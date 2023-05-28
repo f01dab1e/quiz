@@ -1,5 +1,7 @@
 use lt_quiz_core::traits::Database;
-use rusqlite::{self, params, Connection, Result};
+use miette::IntoDiagnostic as _;
+use rusqlite::{self, params, Connection};
+use stdx::Result;
 
 use crate::toml;
 
@@ -24,19 +26,23 @@ impl Database for Sqlite {
         conn.execute(
             "INSERT INTO questions (description, answer, distractors) VALUES (?, ?, ?)",
             params![question.description, question.answer, distractors],
-        )?;
+        )
+        .into_diagnostic()?;
 
         let question_id = conn.last_insert_rowid();
         for tag in question.tags.iter() {
-            conn.execute("INSERT OR IGNORE INTO tags (text) VALUES (?)", [tag])?;
+            conn.execute("INSERT OR IGNORE INTO tags (text) VALUES (?)", [tag])
+                .into_diagnostic()?;
 
-            let tag_id =
-                conn.query_row("SELECT id FROM tags WHERE text = ?", [tag], |row| row.get(0))?;
+            let tag_id = conn
+                .query_row("SELECT id FROM tags WHERE text = ?", [tag], |row| row.get(0))
+                .into_diagnostic()?;
 
             conn.execute(
                 "INSERT INTO question_tags (question_id, tag_id) VALUES (?, ?)",
                 [question_id, tag_id],
-            )?;
+            )
+            .into_diagnostic()?;
         }
 
         Ok(())
@@ -64,12 +70,12 @@ impl Database for Sqlite {
             writeln!(query, "AND t.text NOT IN ({})", placeholders(no_tags.len())).unwrap();
         }
 
-        let mut stmt = conn.prepare(&query)?;
+        let mut stmt = conn.prepare(&query).into_diagnostic()?;
 
         let mut tags = has_tags;
         tags.extend(no_tags);
 
-        let rows = stmt.query(rusqlite::params_from_iter(tags))?;
+        let rows = stmt.query(rusqlite::params_from_iter(tags)).into_diagnostic()?;
         rows.mapped(|row| {
             let id = row.get(0)?;
             let description = row.get(1)?;
@@ -87,37 +93,44 @@ impl Database for Sqlite {
                 tags: <_>::default(),
             })
         })
-        .collect()
+        .collect::<rusqlite::Result<_>>()
+        .into_diagnostic()
     }
 
     fn migrations(&self) -> Result<()> {
-        self.conn.execute(
-            "CREATE TABLE IF NOT EXISTS questions (
+        self.conn
+            .execute(
+                "CREATE TABLE IF NOT EXISTS questions (
         id INTEGER PRIMARY KEY,
         description TEXT,
         answer TEXT,
         distractors TEXT
     )",
-            [],
-        )?;
+                [],
+            )
+            .into_diagnostic()?;
 
-        self.conn.execute(
-            "CREATE TABLE IF NOT EXISTS tags (
+        self.conn
+            .execute(
+                "CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY,
         text TEXT UNIQUE
     )",
-            [],
-        )?;
+                [],
+            )
+            .into_diagnostic()?;
 
-        self.conn.execute(
-            "CREATE TABLE IF NOT EXISTS question_tags (
+        self.conn
+            .execute(
+                "CREATE TABLE IF NOT EXISTS question_tags (
         question_id INTEGER,
         tag_id INTEGER,
         FOREIGN KEY (question_id) REFERENCES questions(id),
         FOREIGN KEY (tag_id) REFERENCES tags(id)
     )",
-            [],
-        )?;
+                [],
+            )
+            .into_diagnostic()?;
 
         Ok(())
     }
