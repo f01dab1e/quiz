@@ -1,4 +1,6 @@
-use crate::{db, ir, toml, Result};
+use lt_quiz_core::ir;
+
+use crate::{db, toml, Result};
 
 pub(crate) struct State {
     pub(crate) config: ir::Config,

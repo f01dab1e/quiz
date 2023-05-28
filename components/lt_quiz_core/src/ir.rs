@@ -1,18 +1,14 @@
-use crate::{toml, Result};
+use stdx::Result;
 
-pub(crate) type Symbol = Box<str>;
+use crate::toml;
 
-pub(crate) struct Field<T> {
-    pub(crate) value: T,
-    pub(crate) kind: FieldKind,
-}
+type Symbol = Box<str>;
 
-impl<T> std::ops::Deref for Field<T> {
-    type Target = T;
-
-    fn deref(&self) -> &Self::Target {
-        &self.value
-    }
+/// Field
+#[derive(Debug)]
+pub struct Field<T> {
+    value: T,
+    kind: FieldKind,
 }
 
 impl<T> Field<T> {
@@ -24,10 +20,24 @@ impl<T> Field<T> {
     fn inherit(name: &str, value: T) -> Self {
         Self { value, kind: FieldKind::Inherits(name.into()) }
     }
+
+    /// Returns the kind of the field.
+    pub fn kind(&self) -> FieldKind {
+        self.kind.clone()
+    }
+
+    /// Returns a reference to the value of the field.
+    pub fn value(&self) -> &T {
+        &self.value
+    }
 }
 
-pub(crate) enum FieldKind {
+/// Represents the kind of a field.
+#[derive(Debug, Clone)]
+pub enum FieldKind {
+    /// Represents a user-defined field.
     User,
+    /// Represents a field that inherits from a symbol (name).
     Inherits(Symbol),
 }
 
@@ -40,8 +50,11 @@ impl std::fmt::Display for FieldKind {
     }
 }
 
-pub(crate) struct Config {
-    pub(crate) theme: Field<String>,
+/// `toml::Config::from_home_dir`
+#[derive(Debug)]
+pub struct Config {
+    /// `toml::Config`
+    pub theme: Field<String>,
 }
 
 impl Default for Config {
@@ -52,7 +65,8 @@ impl Default for Config {
 }
 
 impl Config {
-    pub(crate) fn from_home_dir() -> Result<Self> {
+    /// `toml::Config::from_home_dir`
+    pub fn from_home_dir() -> Result<Self> {
         toml::Config::from_home_dir().map(Self::from_toml)
     }
 

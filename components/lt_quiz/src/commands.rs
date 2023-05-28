@@ -100,8 +100,8 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
 
     let theme = theme_set
         .themes
-        .get(&*config.theme)
-        .ok_or_else(|| miette::miette!("Canot load the theme: {}", *config.theme))?;
+        .get(config.theme.value())
+        .ok_or_else(|| miette::miette!("Canot load the theme: {}", config.theme.value()))?;
 
     let mut highlight_lines = {
         let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
@@ -129,7 +129,7 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
 }
 
 pub(crate) fn config(State { config, .. }: &State, _args: Args, _properties: Props) -> Result {
-    println!("[{}] Theme: {}", config.theme.kind, *config.theme);
+    println!("[{}] Theme: {}", config.theme.kind(), config.theme.value());
 
     Ok(())
 }

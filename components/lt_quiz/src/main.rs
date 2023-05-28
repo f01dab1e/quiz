@@ -5,7 +5,6 @@
 
 mod commands;
 mod db;
-mod ir;
 mod state;
 #[cfg(test)]
 mod test;
@@ -40,7 +39,7 @@ fn main() -> Result {
 
     let state = {
         let state = state::State {
-            config: ir::Config::from_home_dir()?,
+            config: lt_quiz_core::ir::Config::from_home_dir()?,
             db: db::init().into_diagnostic()?,
             cache: anymap::AnyMap::new().into(),
         };
