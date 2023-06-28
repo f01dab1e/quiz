@@ -10,3 +10,6 @@ lazy_format = "2.0"
 itertools = "0.11"
 expect-test = "1.4"
 miette = { version = "5.9", features = ["fancy"] }
+
+[patch.crates-io]
+plist = { git = "https://github.com/f01dab1e/rust-plist.git" }
