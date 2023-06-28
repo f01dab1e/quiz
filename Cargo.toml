@@ -1,5 +1,6 @@
 [workspace]
 members = ["./components/*"]
+resolver = "2"
 
 [workspace.dependencies]
 stdx = { path = "./components/stdx" }
