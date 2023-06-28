@@ -5,8 +5,8 @@ resolver = "2"
 [workspace.dependencies]
 stdx = { path = "./components/stdx" }
 
-wca = { version = "0.1", git = "https://github.com/Barsik-sus/wTools.git", branch = "ca_dot_command_merged" }
+wca = { git = "https://github.com/Barsik-sus/wTools.git", branch = "ca_dot_command_merged" }
 lazy_format = "2.0"
-itertools = "0.10"
+itertools = "0.11"
 expect-test = "1.4"
-miette = { version = "5.7", features = ["fancy"] }
+miette = { version = "5.9", features = ["fancy"] }
