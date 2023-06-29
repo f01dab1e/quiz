@@ -1,0 +1,11 @@
+[package]
+name = "lt_quiz_core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+stdx.workspace = true
+miette.workspace = true
+serde = { version = "1.0", features = ["derive"] }
+home = "0.5"
+toml = "0.7"

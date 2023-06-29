@@ -1,13 +1,15 @@
 use std::path::PathBuf;
 
 use itertools::Itertools as _;
+use lt_quiz_core::traits::Database as _;
 use miette::{IntoDiagnostic as _, WrapErr as _};
+use stdx::parse_args;
 use wca::{Args, Props};
 
-use crate::db::Database as _;
-use crate::{stdx, toml, Result, State};
+use crate::state::State;
+use crate::{toml, Result};
 
-pub(crate) fn import_from(State { db, .. }: &State, args: Args, _props: Props) -> Result {
+pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Props) -> Result {
     let mut args = args.0.into_iter();
     parse_args!(args, path: PathBuf);
 
@@ -19,18 +21,14 @@ pub(crate) fn import_from(State { db, .. }: &State, args: Args, _props: Props) -
         ::toml::from_str(&input).into_diagnostic()?
     };
 
-    for question in questions {
-        db.add_question(question).into_diagnostic()?;
-    }
-
-    Ok(())
+    db.add_questions(questions)
 }
 
-pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, props: Props) -> Result {
-    let has_tags = props.get_owned("has_tags").unwrap_or_default();
-    let no_tags = props.get_owned("no_tags").unwrap_or_default();
+pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, properties: Props) -> Result {
+    let has_tags = properties.get_owned("has_tags").unwrap_or_default();
+    let no_tags = properties.get_owned("no_tags").unwrap_or_default();
 
-    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    let questions = db.find_questions(has_tags, no_tags)?;
 
     for toml::Question { id, description, answer, distractors, .. } in questions {
         let id = id.unwrap();
@@ -43,16 +41,16 @@ pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, props: Props
     Ok(())
 }
 
-pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, props: Props) -> Result {
+pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, properties: Props) -> Result {
     use prettytable::{row, Table};
 
-    let has_tags = props.get_owned("has_tags").unwrap_or_default();
-    let no_tags = props.get_owned("no_tags").unwrap_or_default();
+    let has_tags = properties.get_owned("has_tags").unwrap_or_default();
+    let no_tags = properties.get_owned("no_tags").unwrap_or_default();
 
     let mut table = Table::new();
     let mut rows = Vec::new();
 
-    let questions = db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    let questions = db.find_questions(has_tags, no_tags)?;
     for toml::Question { id, description, answer, distractors, .. } in questions {
         let distractors = distractors.iter().join("\n");
         rows.push(row![id.unwrap(), description, answer, distractors]);
@@ -65,9 +63,9 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, props: Prop
     Ok(())
 }
 
-pub(crate) fn questions(state: &State, _args: Args, props: Props) -> Result {
-    let has_tags = props.get_owned("has_tags").unwrap_or_default();
-    let no_tags = props.get_owned("no_tags").unwrap_or_default();
+pub(crate) fn questions(state: &State, _args: Args, properties: Props) -> Result {
+    let has_tags = properties.get_owned("has_tags").unwrap_or_default();
+    let no_tags = properties.get_owned("no_tags").unwrap_or_default();
 
     let questions = state.questions(has_tags, no_tags)?;
     println!("{:?}", questions);
@@ -75,7 +73,7 @@ pub(crate) fn questions(state: &State, _args: Args, props: Props) -> Result {
     Ok(())
 }
 
-pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
+pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: Props) -> Result {
     use std::io::Write as _;
     use std::iter::zip;
 
@@ -87,8 +85,8 @@ pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
     let mut writer = std::fs::File::create(path).into_diagnostic()?;
     writer.write_all(b"# Rust Quiz").into_diagnostic()?;
 
-    let has_tags = props.get_owned("has_tags").unwrap_or_default();
-    let no_tags = props.get_owned("no_tags").unwrap_or_default();
+    let has_tags = properties.get_owned("has_tags").unwrap_or_default();
+    let no_tags = properties.get_owned("no_tags").unwrap_or_default();
 
     let mut formatter = {
         silicon::formatter::ImageFormatterBuilder::new()
@@ -102,8 +100,8 @@ pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
 
     let theme = theme_set
         .themes
-        .get(&*state.config.theme)
-        .ok_or_else(|| miette::miette!("Canot load the theme: {}", *state.config.theme))?;
+        .get(config.theme.value())
+        .ok_or_else(|| miette::miette!("Canot load the theme: {}", config.theme.value()))?;
 
     let mut highlight_lines = {
         let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
@@ -111,7 +109,7 @@ pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
         syntect::easy::HighlightLines::new(rust_syntax, theme)
     };
 
-    let questions = state.db.find_questions(has_tags, no_tags).into_diagnostic()?;
+    let questions = db.find_questions(has_tags, no_tags)?;
     for question in questions {
         for (code, index) in zip(stdx::find_rust_code_blocks(&question.description), 0_usize..) {
             let lines = syntect::util::LinesWithEndings::from(&code)
@@ -130,8 +128,8 @@ pub(crate) fn export(state: &State, args: Args, props: Props) -> Result {
     Ok(())
 }
 
-pub(crate) fn config(state: &State, _args: Args, _props: Props) -> Result {
-    println!("[{}] Theme: {}", state.config.theme.kind, *state.config.theme);
+pub(crate) fn config(State { config, .. }: &State, _args: Args, _properties: Props) -> Result {
+    println!("[{}] Theme: {}", config.theme.kind(), config.theme.value());
 
     Ok(())
 }
@@ -181,12 +179,12 @@ mod tests {
         world().assert(
             commands::questions_list,
             expect![[r#"
-                0. Memory safety in Rust
-                Answer:
-                Unsafe
-                Distractors:
-                Safe
-            "#]],
+            1. Memory safety in Rust
+            Answer:
+            Unsafe
+            Distractors:
+            Safe
+        "#]],
         );
     }
 
@@ -211,7 +209,7 @@ mod tests {
                 +----+-----------------------+--------+-------------+
                 | ID | Description           | Answer | Distractors |
                 +----+-----------------------+--------+-------------+
-                | 0  | Memory safety in Rust | Unsafe | Safe        |
+                | 1  | Memory safety in Rust | Unsafe | Safe        |
                 +----+-----------------------+--------+-------------+
 
             "#]],
