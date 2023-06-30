@@ -3,6 +3,9 @@ name = "lt_quiz"
 version = "0.1.0"
 edition = "2021"
 
+[lints]
+workspace = true
+
 [dependencies]
 lazy-regex = "2.5"
 wca.workspace = true

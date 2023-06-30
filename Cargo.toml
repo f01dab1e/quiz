@@ -1,5 +1,5 @@
 [workspace]
-members = ["./components/*"]
+members = ["components/lt_quiz_core", "components/stdx", "components/lt_quiz"]
 resolver = "2"
 
 [workspace.dependencies]
@@ -13,3 +13,12 @@ miette = { version = "5.9", features = ["fancy"] }
 
 [patch.crates-io]
 plist = { git = "https://github.com/f01dab1e/rust-plist.git" }
+
+[workspace.lints.rust]
+unused_qualifications = "deny"
+unreachable_pub = "deny"
+missing_debug_implementations = "deny"
+missing_docs = "deny"
+
+[workspace.lints.clippy]
+use_self = "deny"

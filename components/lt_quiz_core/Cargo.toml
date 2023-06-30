@@ -3,6 +3,9 @@ name = "lt_quiz_core"
 version = "0.1.0"
 edition = "2021"
 
+[lints]
+workspace = true
+
 [dependencies]
 stdx.workspace = true
 miette.workspace = true
