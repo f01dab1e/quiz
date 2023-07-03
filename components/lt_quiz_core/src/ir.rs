@@ -22,8 +22,8 @@ impl<T> Field<T> {
     }
 
     /// Returns the kind of the field.
-    pub fn kind(&self) -> FieldKind {
-        self.kind.clone()
+    pub fn kind(&self) -> &FieldKind {
+        &self.kind
     }
 
     /// Returns a reference to the value of the field.
