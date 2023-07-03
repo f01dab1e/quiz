@@ -57,6 +57,8 @@ impl<F> Builder<F> {
     }
 
     pub fn properties<const N: usize>(mut self, properties: [Property<'_>; N]) -> Self {
+        self.command.properties.reserve(properties.len());
+
         for property in properties {
             self.command.properties.insert(
                 property.name.to_owned(),
