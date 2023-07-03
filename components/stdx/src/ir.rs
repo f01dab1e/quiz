@@ -39,7 +39,9 @@ impl<F> Builder<F> {
     pub fn new(handler: F) -> Self {
         let name = {
             let name = std::any::type_name::<F>();
-            name.rfind(':').map_or(name, |tail| &name[tail + 1..]).split('_').join(".")
+            let name = name.rfind(':').map_or(name, |tail| &name[tail + 1..]);
+
+            name.split('_').join(".")
         };
 
         Self { handler, command: wca::Command::former().phrase(name).form() }
