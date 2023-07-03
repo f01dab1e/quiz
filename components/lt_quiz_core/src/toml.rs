@@ -20,7 +20,7 @@ impl Config {
     /// exist, an empty string is used as the input. The function returns the
     /// deserialized configuration as a `Result`, transformed into a diagnostic
     /// error if necessary.
-    pub fn from_home_dir(path: PathBuf) -> Result<Self> {
+    pub fn from_dir(path: PathBuf) -> Result<Self> {
         use std::io::ErrorKind;
 
         let input = match std::fs::read_to_string(&path) {

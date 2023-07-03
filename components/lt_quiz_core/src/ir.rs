@@ -68,8 +68,8 @@ impl Default for Config {
 
 impl Config {
     /// `toml::Config::from_home_dir`
-    pub fn from_home_dir(path: PathBuf) -> Result<Self> {
-        toml::Config::from_home_dir(path).map(Self::from_toml)
+    pub fn from_dir(path: PathBuf) -> Result<Self> {
+        toml::Config::from_dir(path).map(Self::from_toml)
     }
 
     pub(crate) fn from_toml(toml: toml::Config) -> Self {

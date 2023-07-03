@@ -40,7 +40,7 @@ fn main() -> Result {
 
     let state = {
         let state = state::State {
-            config: lt_quiz_core::ir::Config::from_home_dir(path::config())?,
+            config: lt_quiz_core::ir::Config::from_dir(path::config())?,
             db: db::init()?,
             cache: anymap::AnyMap::new().into(),
         };
