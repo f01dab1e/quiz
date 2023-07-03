@@ -76,25 +76,7 @@ impl Database for Sqlite {
         tags.extend(no_tags);
 
         let rows = stmt.query(rusqlite::params_from_iter(tags)).into_diagnostic()?;
-        rows.mapped(|row| {
-            let id = row.get(0)?;
-            let description = row.get(1)?;
-            let answer = row.get(2)?;
-            let distractors = {
-                let json: String = row.get(3)?;
-                serde_json::from_str(&json).unwrap()
-            };
-
-            Ok(toml::Question {
-                id: Some(id),
-                description,
-                answer,
-                distractors,
-                tags: <_>::default(),
-            })
-        })
-        .collect::<rusqlite::Result<_>>()
-        .into_diagnostic()
+        rows.mapped(question_from_row).collect::<rusqlite::Result<_>>().into_diagnostic()
     }
 
     fn migrations(&self) -> Result<()> {
@@ -134,6 +116,20 @@ impl Database for Sqlite {
 
         Ok(())
     }
+}
+
+fn question_from_row(
+    row: &rusqlite::Row<'_>,
+) -> std::result::Result<toml::Question, rusqlite::Error> {
+    let id = row.get(0)?;
+    let description = row.get(1)?;
+    let answer = row.get(2)?;
+    let distractors = {
+        let json: String = row.get(3)?;
+        serde_json::from_str(&json).unwrap()
+    };
+
+    Ok(toml::Question { id: Some(id), description, answer, distractors, tags: <_>::default() })
 }
 
 fn placeholders(n: usize) -> String {
