@@ -139,3 +139,16 @@ impl Database for Sqlite {
 fn placeholders(n: usize) -> String {
     itertools::join(std::iter::repeat("?").take(n), ",")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_placeholders() {
+        assert_eq!(placeholders(0), "");
+        assert_eq!(placeholders(1), "?");
+        assert_eq!(placeholders(3), "?,?,?");
+        assert_eq!(placeholders(5), "?,?,?,?,?");
+    }
+}
