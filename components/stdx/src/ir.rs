@@ -116,3 +116,24 @@ fn array_push<const N: usize, T>(this: [T; N], item: T) -> [T; N + 1] {
         uninit.assume_init()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_array_push() {
+        let arr: [u32; 3] = [1, 2, 3];
+        let pushed_arr: [u32; 4] = array_push(arr, 4);
+
+        assert_eq!(pushed_arr, [1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn test_array_push_empty() {
+        let empty_arr: [u32; 0] = [];
+        let pushed_arr: [u32; 1] = array_push(empty_arr, 1);
+
+        assert_eq!(pushed_arr, [1]);
+    }
+}
