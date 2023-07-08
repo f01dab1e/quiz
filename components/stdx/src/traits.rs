@@ -12,7 +12,7 @@ pub trait CommandExt<T>: Sized {
     }
 
     /// Adds properties to the command.
-    fn properties<const N: usize>(self, properties: [Property; N]) -> Builder<Self> {
+    fn properties<const N: usize>(self, properties: [Property<'_>; N]) -> Builder<Self> {
         Builder::new(self).properties(properties)
     }
 }

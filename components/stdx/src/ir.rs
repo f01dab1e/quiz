@@ -39,7 +39,9 @@ impl<F> Builder<F> {
     pub fn new(handler: F) -> Self {
         let name = {
             let name = std::any::type_name::<F>();
-            name.rfind(':').map_or(name, |tail| &name[tail + 1..]).split('_').join(".")
+            let name = name.rfind(':').map_or(name, |tail| &name[tail + 1..]);
+
+            name.split('_').join(".")
         };
 
         Self { handler, command: wca::Command::former().phrase(name).form() }
@@ -54,7 +56,9 @@ impl<F> Builder<F> {
         self
     }
 
-    pub fn properties<const N: usize>(mut self, properties: [Property; N]) -> Self {
+    pub fn properties<const N: usize>(mut self, properties: [Property<'_>; N]) -> Self {
+        self.command.properties.reserve(properties.len());
+
         for property in properties {
             self.command.properties.insert(
                 property.name.to_owned(),
@@ -110,5 +114,26 @@ fn array_push<const N: usize, T>(this: [T; N], item: T) -> [T; N + 1] {
         (ptr.add(N) as *mut [T; 1]).write([item]);
 
         uninit.assume_init()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_array_push() {
+        let arr: [u32; 3] = [1, 2, 3];
+        let pushed_arr: [u32; 4] = array_push(arr, 4);
+
+        assert_eq!(pushed_arr, [1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn test_array_push_empty() {
+        let empty_arr: [u32; 0] = [];
+        let pushed_arr: [u32; 1] = array_push(empty_arr, 1);
+
+        assert_eq!(pushed_arr, [1]);
     }
 }

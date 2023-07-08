@@ -111,7 +111,9 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
 
     let questions = db.find_questions(has_tags, no_tags)?;
     for question in questions {
-        for (code, index) in zip(stdx::find_rust_code_blocks(&question.description), 0_usize..) {
+        for (code, index) in
+            zip(stdx::markdown::find_rust_code_blocks(&question.description), 0_usize..)
+        {
             let lines = syntect::util::LinesWithEndings::from(&code)
                 .map(|line| highlight_lines.highlight_line(line, &syntax_set))
                 .collect::<Result<Vec<_>, _>>()

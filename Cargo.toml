@@ -19,6 +19,7 @@ unused_qualifications = "deny"
 unreachable_pub = "deny"
 missing_debug_implementations = "deny"
 missing_docs = "deny"
+elided_lifetimes_in_paths = "deny"
 
 [workspace.lints.clippy]
 use_self = "deny"
