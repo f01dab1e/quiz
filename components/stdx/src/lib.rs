@@ -1,8 +1,5 @@
 //! The missing batteries of WCA.
 
-#![allow(incomplete_features)]
-#![feature(generic_const_exprs)]
-
 mod macros;
 /// This module provides functionality for parsing and rendering Markdown.
 pub mod markdown;

@@ -1,7 +1,7 @@
 //! lt_quiz
 
 #![allow(incomplete_features)]
-#![feature(generic_const_exprs, internal_output_capture)]
+#![feature(internal_output_capture)]
 
 mod commands;
 mod db;
