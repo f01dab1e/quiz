@@ -239,7 +239,7 @@ dependencies = [
 [[package]]
 name = "clone_dyn"
 version = "0.1.0"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "clone_dyn_meta",
 ]
@@ -247,7 +247,7 @@ dependencies = [
 [[package]]
 name = "clone_dyn_meta"
 version = "0.1.1"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc_macro_tools",
 ]
@@ -469,7 +469,7 @@ checksum = "ef8ae57c4978a2acd8b869ce6b9ca1dfe817bff704c220209fdef2c0b75a01b9"
 [[package]]
 name = "data_type"
 version = "0.1.9"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "either",
  "type_constructor",
@@ -492,7 +492,7 @@ dependencies = [
 [[package]]
 name = "derive_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "clone_dyn",
  "derive_more",
@@ -503,7 +503,7 @@ dependencies = [
 [[package]]
 name = "diagnostics_tools"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "pretty_assertions",
 ]
@@ -634,7 +634,7 @@ dependencies = [
 [[package]]
 name = "error_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "anyhow",
  "thiserror",
@@ -730,7 +730,7 @@ dependencies = [
 [[package]]
 name = "for_each"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "foreign-types"
@@ -750,7 +750,7 @@ checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 [[package]]
 name = "former"
 version = "0.1.12"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former_meta",
  "former_runtime",
@@ -759,7 +759,7 @@ dependencies = [
 [[package]]
 name = "former_meta"
 version = "0.1.12"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "iter_tools",
  "proc-macro2",
@@ -771,7 +771,7 @@ dependencies = [
 [[package]]
 name = "former_runtime"
 version = "0.1.12"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "freetype"
@@ -934,12 +934,12 @@ dependencies = [
 [[package]]
 name = "implements"
 version = "0.1.2"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "impls_index"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "impls_index_meta",
 ]
@@ -947,7 +947,7 @@ dependencies = [
 [[package]]
 name = "impls_index_meta"
 version = "0.1.2"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc_macro_tools",
 ]
@@ -965,7 +965,7 @@ dependencies = [
 [[package]]
 name = "inspect_type"
 version = "0.1.3"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "instant"
@@ -1008,12 +1008,12 @@ checksum = "616cde7c720bb2bb5824a224687d8f77bfd38922027f01d825cd7453be5099fb"
 [[package]]
 name = "is_slice"
 version = "0.1.1"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "iter_tools"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "itertools 0.10.5",
 ]
@@ -1275,7 +1275,7 @@ dependencies = [
 [[package]]
 name = "mem_tools"
 version = "0.1.1"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "memchr"
@@ -1295,7 +1295,7 @@ dependencies = [
 [[package]]
 name = "meta_tools"
 version = "0.2.18"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "for_each",
  "former",
@@ -1309,7 +1309,7 @@ dependencies = [
 [[package]]
 name = "meta_tools_min"
 version = "0.2.13"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "for_each",
  "impls_index",
@@ -1378,7 +1378,7 @@ dependencies = [
 [[package]]
 name = "mod_interface"
 version = "0.1.16"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "mod_interface_meta",
  "mod_interface_runtime",
@@ -1387,7 +1387,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_meta"
 version = "0.1.11"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "derive_tools",
  "proc_macro_tools",
@@ -1396,7 +1396,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_runtime"
 version = "0.1.2"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "nalgebra"
@@ -1833,7 +1833,7 @@ dependencies = [
 [[package]]
 name = "proc_macro_tools"
 version = "0.1.18"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2275,7 +2275,7 @@ checksum = "9e08d8363704e6c71fc928674353e6b7c23dcea9d82d7012c8faf2a3a025f8d0"
 [[package]]
 name = "strs_tools"
 version = "0.1.8"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former",
  "lexical",
@@ -2535,7 +2535,7 @@ dependencies = [
 [[package]]
 name = "time_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "toml"
@@ -2580,7 +2580,7 @@ checksum = "7b3e06c9b9d80ed6b745c7159c40b311ad2916abb34a49e9be2653b90db0d8dd"
 [[package]]
 name = "type_constructor"
 version = "0.1.20"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "type_constructor_derive_make_meta",
  "type_constructor_derive_pair_meta",
@@ -2589,7 +2589,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_make_meta"
 version = "0.1.0"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2599,7 +2599,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_pair_meta"
 version = "0.1.0"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2615,7 +2615,7 @@ checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
 [[package]]
 name = "typing_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "implements",
  "inspect_type",
@@ -2699,7 +2699,7 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 [[package]]
 name = "wca"
 version = "0.1.3"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "anymap",
  "former",
@@ -2827,7 +2827,7 @@ dependencies = [
 [[package]]
 name = "winterval"
 version = "0.1.6"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "wio"
@@ -2841,7 +2841,7 @@ dependencies = [
 [[package]]
 name = "woptions"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former",
  "woptions_meta",
@@ -2851,7 +2851,7 @@ dependencies = [
 [[package]]
 name = "woptions_meta"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "convert_case 0.5.0",
  "iter_tools",
@@ -2862,7 +2862,7 @@ dependencies = [
 [[package]]
 name = "woptions_runtime"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former",
 ]
@@ -2870,7 +2870,7 @@ dependencies = [
 [[package]]
 name = "wtools"
 version = "0.2.20"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "data_type",
  "derive_tools",

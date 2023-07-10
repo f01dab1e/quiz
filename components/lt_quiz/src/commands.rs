@@ -3,7 +3,6 @@ use std::path::PathBuf;
 use itertools::Itertools as _;
 use lt_quiz_core::traits::Database as _;
 use miette::{IntoDiagnostic as _, WrapErr as _};
-use stdx::parse_args;
 use wca::{Args, Props};
 
 use crate::state::State;
@@ -11,7 +10,7 @@ use crate::{toml, Result};
 
 pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Props) -> Result {
     let mut args = args.0.into_iter();
-    parse_args!(args, path: PathBuf);
+    wca::parse_args!(args, path: PathBuf);
 
     let questions: toml::Questions = {
         let input = std::fs::read_to_string(&path)
@@ -80,7 +79,7 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
     use silicon::assets::HighlightingAssets;
 
     let mut args = args.0.into_iter();
-    parse_args!(args, path: PathBuf);
+    wca::parse_args!(args, path: PathBuf);
 
     let mut writer = std::fs::File::create(path).into_diagnostic()?;
     writer.write_all(b"# Rust Quiz").into_diagnostic()?;
