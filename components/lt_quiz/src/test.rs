@@ -16,11 +16,7 @@ pub(crate) struct World {
 impl Default for World {
     fn default() -> Self {
         Self {
-            state: State {
-                config: <_>::default(),
-                db: crate::db::Sqlite::memory().into(),
-                cache: anymap::AnyMap::new().into(),
-            },
+            state: State::new(<_>::default(), crate::db::Sqlite::memory().into()),
             args: wca::Args(<_>::default()),
             props: wca::Props(<_>::default()),
         }
@@ -46,12 +42,12 @@ impl World {
 
     pub(crate) fn assert(
         self,
-        handler: impl Fn(&State, wca::Args, wca::Props) -> crate::Result,
+        handler: impl Fn(State, wca::Args, wca::Props) -> crate::Result,
         expect: Expect,
     ) {
         std::io::set_output_capture(Some(Default::default()));
 
-        handler(&self.state, self.args, self.props).unwrap();
+        handler(self.state, self.args, self.props).unwrap();
 
         let captured = std::io::set_output_capture(None).unwrap();
         let captured = Arc::try_unwrap(captured).unwrap().into_inner().unwrap();

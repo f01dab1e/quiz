@@ -5,7 +5,7 @@ resolver = "2"
 [workspace.dependencies]
 stdx = { path = "./components/stdx" }
 
-wca = { git = "https://github.com/Barsik-sus/wTools.git", branch = "ca_dot_command_merged" }
+wca = { git = "https://github.com/f01dab1e/wTools.git", branch = "f0kek" }
 lazy_format = "2.0"
 itertools = "0.11"
 expect-test = "1.4"

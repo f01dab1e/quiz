@@ -10,9 +10,9 @@ checksum = "c71b1793ee61086797f5c80b6efa2b8ffa6d5dd703f118545808a7f2e27f7046"
 
 [[package]]
 name = "addr2line"
-version = "0.19.0"
+version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a76fd60b23679b7d19bd066031410fb7e458ccc5e958eb5c325888ce4baedc97"
+checksum = "f4fa78e18c64fce05e902adecd7a5eed15a5e0a3439f7b0e169f0252214865e3"
 dependencies = [
  "gimli",
 ]
@@ -109,15 +109,15 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "backtrace"
-version = "0.3.67"
+version = "0.3.68"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "233d376d6d185f2a3093e58f283f60f880315b6c60075b01f36b3b85154564ca"
+checksum = "4319208da049c43661739c5fade2ba182f09d1dc2299b32298d3a31692b17e12"
 dependencies = [
  "addr2line",
  "cc",
  "cfg-if",
  "libc",
- "miniz_oxide 0.6.2",
+ "miniz_oxide",
  "object",
  "rustc-demangle",
 ]
@@ -239,7 +239,7 @@ dependencies = [
 [[package]]
 name = "clone_dyn"
 version = "0.1.0"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "clone_dyn_meta",
 ]
@@ -247,10 +247,16 @@ dependencies = [
 [[package]]
 name = "clone_dyn_meta"
 version = "0.1.1"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "proc_macro_tools",
 ]
+
+[[package]]
+name = "closure"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6173fd61b610d15a7566dd7b7620775627441c4ab9dac8906e17cb93a24b782"
 
 [[package]]
 name = "cmake"
@@ -469,7 +475,7 @@ checksum = "ef8ae57c4978a2acd8b869ce6b9ca1dfe817bff704c220209fdef2c0b75a01b9"
 [[package]]
 name = "data_type"
 version = "0.1.9"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "either",
  "type_constructor",
@@ -492,7 +498,7 @@ dependencies = [
 [[package]]
 name = "derive_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "clone_dyn",
  "derive_more",
@@ -503,7 +509,7 @@ dependencies = [
 [[package]]
 name = "diagnostics_tools"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "pretty_assertions",
 ]
@@ -634,7 +640,7 @@ dependencies = [
 [[package]]
 name = "error_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "anyhow",
  "thiserror",
@@ -687,7 +693,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3b9429470923de8e8cbd4d2dc513535400b4b3fef0319fb5c4e1f520a7bef743"
 dependencies = [
  "crc32fast",
- "miniz_oxide 0.7.1",
+ "miniz_oxide",
 ]
 
 [[package]]
@@ -730,7 +736,7 @@ dependencies = [
 [[package]]
 name = "for_each"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "foreign-types"
@@ -750,7 +756,7 @@ checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 [[package]]
 name = "former"
 version = "0.1.12"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "former_meta",
  "former_runtime",
@@ -759,7 +765,7 @@ dependencies = [
 [[package]]
 name = "former_meta"
 version = "0.1.12"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "iter_tools",
  "proc-macro2",
@@ -771,7 +777,7 @@ dependencies = [
 [[package]]
 name = "former_runtime"
 version = "0.1.12"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "freetype"
@@ -876,18 +882,9 @@ dependencies = [
 
 [[package]]
 name = "hermit-abi"
-version = "0.2.6"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee512640fe35acbfb4bb779db6f0d80704c2cacfa2e39b601ef3e3f47d1ae4c7"
-dependencies = [
- "libc",
-]
-
-[[package]]
-name = "hermit-abi"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fed44880c466736ef9a5c5b5facefb5ed0785676d0c02d612db14e54f0d84286"
+checksum = "443144c8cdadd93ebf52ddb4056d257f5b52c04d3c804e657d19eb73fc33668b"
 
 [[package]]
 name = "home"
@@ -934,12 +931,12 @@ dependencies = [
 [[package]]
 name = "implements"
 version = "0.1.2"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "impls_index"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "impls_index_meta",
 ]
@@ -947,7 +944,7 @@ dependencies = [
 [[package]]
 name = "impls_index_meta"
 version = "0.1.2"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "proc_macro_tools",
 ]
@@ -965,7 +962,7 @@ dependencies = [
 [[package]]
 name = "inspect_type"
 version = "0.1.3"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "instant"
@@ -982,20 +979,19 @@ version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eae7b9aee968036d54dce06cebaefd919e4472e753296daccd6d344e3e2df0c2"
 dependencies = [
- "hermit-abi 0.3.1",
+ "hermit-abi 0.3.2",
  "libc",
  "windows-sys",
 ]
 
 [[package]]
 name = "is-terminal"
-version = "0.4.7"
+version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "adcf93614601c8129ddf72e2d5633df827ba6551541c6d8c59520a371475be1f"
+checksum = "cb0889898416213fab133e1d33a0e5858a48177452750691bde3666d0fdbaf8b"
 dependencies = [
- "hermit-abi 0.3.1",
- "io-lifetimes",
- "rustix",
+ "hermit-abi 0.3.2",
+ "rustix 0.38.3",
  "windows-sys",
 ]
 
@@ -1008,12 +1004,12 @@ checksum = "616cde7c720bb2bb5824a224687d8f77bfd38922027f01d825cd7453be5099fb"
 [[package]]
 name = "is_slice"
 version = "0.1.1"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "iter_tools"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "itertools 0.10.5",
 ]
@@ -1038,9 +1034,9 @@ dependencies = [
 
 [[package]]
 name = "itoa"
-version = "1.0.6"
+version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "453ad9f582a441959e5f0d088b02ce04cfe8d51a8eaf077f12ac6d3e94164ca6"
+checksum = "62b02a5381cc465bd3041d84623d0fa3b66738b52b8e2fc3bab8ad63ab032f4a"
 
 [[package]]
 name = "jpeg-decoder"
@@ -1208,6 +1204,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef53942eb7bf7ff43a617b3e2c1c4a5ecf5944a7c1bc12d7ee39bbb15e5c1519"
 
 [[package]]
+name = "linux-raw-sys"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09fc20d2ca12cb9f044c93e3bd6d32d523e6e2ec3db4f7b2939cd99026ecd3f0"
+
+[[package]]
 name = "literally"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1275,7 +1277,7 @@ dependencies = [
 [[package]]
 name = "mem_tools"
 version = "0.1.1"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "memchr"
@@ -1295,7 +1297,7 @@ dependencies = [
 [[package]]
 name = "meta_tools"
 version = "0.2.18"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "for_each",
  "former",
@@ -1309,7 +1311,7 @@ dependencies = [
 [[package]]
 name = "meta_tools_min"
 version = "0.2.13"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "for_each",
  "impls_index",
@@ -1347,7 +1349,7 @@ checksum = "4901771e1d44ddb37964565c654a3223ba41a594d02b8da471cc4464912b5cfa"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.22",
+ "syn 2.0.25",
 ]
 
 [[package]]
@@ -1355,15 +1357,6 @@ name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
-
-[[package]]
-name = "miniz_oxide"
-version = "0.6.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b275950c28b37e794e8c55d88aeb5e139d0ce23fdbbeda68f8d7174abdf9e8fa"
-dependencies = [
- "adler",
-]
 
 [[package]]
 name = "miniz_oxide"
@@ -1378,7 +1371,7 @@ dependencies = [
 [[package]]
 name = "mod_interface"
 version = "0.1.16"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "mod_interface_meta",
  "mod_interface_runtime",
@@ -1387,7 +1380,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_meta"
 version = "0.1.11"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "derive_tools",
  "proc_macro_tools",
@@ -1396,7 +1389,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_runtime"
 version = "0.1.2"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "nalgebra"
@@ -1501,11 +1494,11 @@ dependencies = [
 
 [[package]]
 name = "num_cpus"
-version = "1.15.0"
+version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fac9e2da13b5eb447a6ce3d392f23a29d8694bff781bf03a16cd9ac8697593b"
+checksum = "4161fcb6d602d4d2081af7c3a45852d875a03dd337a6bfdd6e06407b61342a43"
 dependencies = [
- "hermit-abi 0.2.6",
+ "hermit-abi 0.3.2",
  "libc",
 ]
 
@@ -1540,9 +1533,9 @@ dependencies = [
 
 [[package]]
 name = "object"
-version = "0.30.4"
+version = "0.31.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03b4680b86d9cfafba8fc491dc9b6df26b68cf40e9e6cd73909194759a63c385"
+checksum = "8bda667d9f2b5051b8833f59f3bf748b28ef54f850f4fcb389a252aa383866d1"
 dependencies = [
  "memchr",
 ]
@@ -1638,9 +1631,9 @@ dependencies = [
 
 [[package]]
 name = "paste"
-version = "1.0.12"
+version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9f746c4065a8fa3fe23974dd82f15431cc8d40779821001404d10d2e79ca7d79"
+checksum = "b4b27ab7be369122c218afc2079489cdcb4b517c0a3fc386ff11e1fedfcc2b35"
 
 [[package]]
 name = "pasteboard"
@@ -1756,7 +1749,7 @@ dependencies = [
  "crc32fast",
  "fdeflate",
  "flate2",
- "miniz_oxide 0.7.1",
+ "miniz_oxide",
 ]
 
 [[package]]
@@ -1823,9 +1816,9 @@ checksum = "dc375e1527247fe1a97d8b7156678dfe7c1af2fc075c9a4db3690ecd2a148068"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.63"
+version = "1.0.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b368fba921b0dce7e60f5e04ec15e565b3303972b42bcfde1d0713b881959eb"
+checksum = "78803b62cbf1f46fde80d7c0e803111524b9877184cfe7c3033659490ac7a7da"
 dependencies = [
  "unicode-ident",
 ]
@@ -1833,7 +1826,7 @@ dependencies = [
 [[package]]
 name = "proc_macro_tools"
 version = "0.1.18"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1853,9 +1846,9 @@ dependencies = [
 
 [[package]]
 name = "quote"
-version = "1.0.28"
+version = "1.0.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b9ab9c7eadfd8df19006f1cf1a4aed13540ed5cbc047010ece5826e10825488"
+checksum = "573015e8ab27661678357f27dc26460738fd2b6c86e46f386fde94cb5d913105"
 dependencies = [
  "proc-macro2",
 ]
@@ -1999,13 +1992,25 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.8.4"
+version = "1.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0ab3ca65655bb1e41f2a8c8cd662eb4fb035e67c3f78da1d61dffe89d07300f"
+checksum = "b2eae68fc220f7cf2532e4494aded17545fce192d59cd996e0fe7887f4ceb575"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-syntax 0.7.2",
+ "regex-automata",
+ "regex-syntax 0.7.3",
+]
+
+[[package]]
+name = "regex-automata"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "83d3daa6976cffb758ec878f108ba0e062a45b2d6ca3a2cca965338855476caf"
+dependencies = [
+ "aho-corasick",
+ "memchr",
+ "regex-syntax 0.7.3",
 ]
 
 [[package]]
@@ -2016,9 +2021,9 @@ checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
 name = "regex-syntax"
-version = "0.7.2"
+version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "436b050e76ed2903236f032a59761c1eb99e1b0aead2c257922771dab1fc8c78"
+checksum = "2ab07dc67230e4a4718e70fd5c20055a4334b121f1f9db8fe63ef39ce9b8c846"
 
 [[package]]
 name = "rusqlite"
@@ -2060,15 +2065,28 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.37.20"
+version = "0.37.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b96e891d04aa506a6d1f318d2771bcb1c7dfda84e126660ace067c9b474bb2c0"
+checksum = "4d69718bf81c6127a49dc64e44a742e8bb9213c0ff8869a22c308f84c1d4ab06"
 dependencies = [
  "bitflags 1.3.2",
  "errno",
  "io-lifetimes",
  "libc",
- "linux-raw-sys",
+ "linux-raw-sys 0.3.8",
+ "windows-sys",
+]
+
+[[package]]
+name = "rustix"
+version = "0.38.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ac5ffa1efe7548069688cd7028f32591853cd7b5b756d41bcffd2353e4fc75b4"
+dependencies = [
+ "bitflags 2.3.3",
+ "errno",
+ "libc",
+ "linux-raw-sys 0.4.3",
  "windows-sys",
 ]
 
@@ -2084,15 +2102,15 @@ dependencies = [
 
 [[package]]
 name = "rustversion"
-version = "1.0.12"
+version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f3208ce4d8448b3f3e7d168a73f5e0c43a61e32930de3bceeccedb388b6bf06"
+checksum = "dc31bd9b61a32c31f9650d18add92aa83a49ba979c143eefd27fe7177b05bd5f"
 
 [[package]]
 name = "ryu"
-version = "1.0.13"
+version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f91339c0467de62360649f8d3e185ca8de4224ff281f66000de5eb2a77a79041"
+checksum = "fe232bdf6be8c8de797b22184ee71118d63780ea42ac85b61d1baa6d3b782ae9"
 
 [[package]]
 name = "safe_arch"
@@ -2150,29 +2168,29 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.164"
+version = "1.0.171"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e8c8cf938e98f769bc164923b06dce91cea1751522f46f8466461af04c9027d"
+checksum = "30e27d1e4fd7659406c492fd6cfaf2066ba8773de45ca75e855590f856dc34a9"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.164"
+version = "1.0.171"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9735b638ccc51c28bf6914d90a2e9725b377144fc612c49a611fddd1b631d68"
+checksum = "389894603bd18c46fa56231694f8d827779c0951a667087194cf9de94ed24682"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.22",
+ "syn 2.0.25",
 ]
 
 [[package]]
 name = "serde_json"
-version = "1.0.99"
+version = "1.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46266871c240a00b8f503b877622fe33430b3c7d963bdc0f2adc511e54a1eae3"
+checksum = "0f1e14e89be7aa4c4b78bdbdc9eb5bf8517829a600ae8eaa39a6e1d960b5185c"
 dependencies = [
  "itoa",
  "ryu",
@@ -2238,9 +2256,9 @@ checksum = "7bd3e3206899af3f8b12af284fafc038cc1dc2b41d1b89dd17297221c5d225de"
 
 [[package]]
 name = "smallvec"
-version = "1.10.0"
+version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a507befe795404456341dfab10cef66ead4c041f62b8b11bbb92bffe5d0953e0"
+checksum = "62bb4feee49fdd9f707ef802e22365a35de4b7b299de4763d44bfea899442ff9"
 
 [[package]]
 name = "smawk"
@@ -2275,7 +2293,7 @@ checksum = "9e08d8363704e6c71fc928674353e6b7c23dcea9d82d7012c8faf2a3a025f8d0"
 [[package]]
 name = "strs_tools"
 version = "0.1.8"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "former",
  "lexical",
@@ -2398,9 +2416,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.22"
+version = "2.0.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2efbeae7acf4eabd6bcdcbd11c92f45231ddda7539edc7806bd1a04a03b24616"
+checksum = "15e3fc8c0c74267e2df136e5e5fb656a464158aa57624053375eb9c8c6e25ae2"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2440,7 +2458,7 @@ dependencies = [
  "cfg-if",
  "fastrand",
  "redox_syscall 0.3.5",
- "rustix",
+ "rustix 0.37.23",
  "windows-sys",
 ]
 
@@ -2487,29 +2505,29 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.40"
+version = "1.0.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "978c9a314bd8dc99be594bc3c175faaa9794be04a5a5e153caba6915336cebac"
+checksum = "a35fc5b8971143ca348fa6df4f024d4d55264f3468c71ad1c2f365b0a4d58c42"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.40"
+version = "1.0.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f9456a42c5b0d803c8cd86e73dd7cc9edd429499f37a3550d286d5e86720569f"
+checksum = "463fe12d7993d3b327787537ce8dd4dfa058de32fc2b195ef3cde03dc4771e8f"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.22",
+ "syn 2.0.25",
 ]
 
 [[package]]
 name = "time"
-version = "0.3.22"
+version = "0.3.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea9e1b3cf1243ae005d9e74085d4d542f3125458f3a81af210d901dcd7411efd"
+checksum = "59e399c068f43a5d116fedaf73b203fa4f9c519f17e2b34f63221d3792f81446"
 dependencies = [
  "itoa",
  "serde",
@@ -2525,9 +2543,9 @@ checksum = "7300fbefb4dadc1af235a9cef3737cea692a9d97e1b9cbcd4ebdae6f8868e6fb"
 
 [[package]]
 name = "time-macros"
-version = "0.2.9"
+version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "372950940a5f07bf38dbe211d7283c9e6d7327df53794992d293e534c733d09b"
+checksum = "96ba15a897f3c86766b757e5ac7221554c6750054d74d5b28844fce5fb36a6c4"
 dependencies = [
  "time-core",
 ]
@@ -2535,13 +2553,13 @@ dependencies = [
 [[package]]
 name = "time_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "toml"
-version = "0.7.5"
+version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ebafdf5ad1220cb59e7d17cf4d2c72015297b75b19a10472f99b89225089240"
+checksum = "c17e963a819c331dcacd7ab957d80bc2b9a9c1e71c804826d2f283dd65306542"
 dependencies = [
  "serde",
  "serde_spanned",
@@ -2560,9 +2578,9 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.19.11"
+version = "0.19.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "266f016b7f039eec8a1a80dfe6156b633d208b9fccca5e4db1d6775b0c4e34a7"
+checksum = "c500344a19072298cd05a7224b3c0c629348b78692bf48466c5238656e315a78"
 dependencies = [
  "indexmap",
  "serde",
@@ -2580,7 +2598,7 @@ checksum = "7b3e06c9b9d80ed6b745c7159c40b311ad2916abb34a49e9be2653b90db0d8dd"
 [[package]]
 name = "type_constructor"
 version = "0.1.20"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "type_constructor_derive_make_meta",
  "type_constructor_derive_pair_meta",
@@ -2589,7 +2607,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_make_meta"
 version = "0.1.0"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2599,7 +2617,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_pair_meta"
 version = "0.1.0"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2615,7 +2633,7 @@ checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
 [[package]]
 name = "typing_tools"
 version = "0.1.5"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "implements",
  "inspect_type",
@@ -2624,15 +2642,15 @@ dependencies = [
 
 [[package]]
 name = "ucd-trie"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e79c4d996edb816c91e4308506774452e55e95c3c9de07b6729e17e15a5ef81"
+checksum = "ed646292ffc8188ef8ea4d1e0e0150fb15a5c2e12ad9b8fc191ae7a8a7f3c4b9"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b15811caf2415fb889178633e7724bad2509101cde276048e013b9def5e51fa0"
+checksum = "22049a19f4a68748a168c0fc439f9516686aa045927ff767eca0a85101fb6e73"
 
 [[package]]
 name = "unicode-linebreak"
@@ -2699,9 +2717,10 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 [[package]]
 name = "wca"
 version = "0.1.3"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "anymap",
+ "closure",
  "former",
  "log",
  "nom",
@@ -2760,9 +2779,9 @@ dependencies = [
 
 [[package]]
 name = "windows-targets"
-version = "0.48.0"
+version = "0.48.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b1eb6f0cd7c80c79759c929114ef071b87354ce476d9d94271031c0497adfd5"
+checksum = "05d4b17490f70499f20b9e791dcf6a299785ce8af4d709018206dc5b4953e95f"
 dependencies = [
  "windows_aarch64_gnullvm",
  "windows_aarch64_msvc",
@@ -2817,9 +2836,9 @@ checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
 
 [[package]]
 name = "winnow"
-version = "0.4.7"
+version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca0ace3845f0d96209f0375e6d367e3eb87eb65d27d445bdc9f1843a26f39448"
+checksum = "81a2094c43cc94775293eaa0e499fbc30048a6d824ac82c0351a8c0bf9112529"
 dependencies = [
  "memchr",
 ]
@@ -2827,7 +2846,7 @@ dependencies = [
 [[package]]
 name = "winterval"
 version = "0.1.6"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 
 [[package]]
 name = "wio"
@@ -2841,7 +2860,7 @@ dependencies = [
 [[package]]
 name = "woptions"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "former",
  "woptions_meta",
@@ -2851,7 +2870,7 @@ dependencies = [
 [[package]]
 name = "woptions_meta"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "convert_case 0.5.0",
  "iter_tools",
@@ -2862,7 +2881,7 @@ dependencies = [
 [[package]]
 name = "woptions_runtime"
 version = "0.1.4"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "former",
 ]
@@ -2870,7 +2889,7 @@ dependencies = [
 [[package]]
 name = "wtools"
 version = "0.2.20"
-source = "git+https://github.com/Barsik-sus/wTools.git?branch=ca_dot_command_merged#7070fd3d77d857250565c5bec0e2e5d0f333fae5"
+source = "git+https://github.com/f01dab1e/wTools.git?branch=f0kek#40c9b1fc3dd8eea630e925fee74fa4ebce6a5a73"
 dependencies = [
  "data_type",
  "derive_tools",
