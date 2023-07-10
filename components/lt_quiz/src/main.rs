@@ -13,7 +13,7 @@ mod test;
 use lt_quiz_core::toml;
 pub(crate) use stdx::Result;
 
-fn mk_aggregator(state: &'static state::State) -> wca::CommandsAggregator {
+fn mk_aggregator(state: state::State) -> wca::CommandsAggregator {
     use wca::stdx::{cli, CommandExt as _, Property};
     use wca::Type;
 
@@ -38,14 +38,7 @@ fn main() -> Result {
     use itertools::Itertools as _;
     use miette::IntoDiagnostic as _;
 
-    let state = {
-        let state = state::State {
-            config: lt_quiz_core::ir::Config::from_dir(path::config())?,
-            db: db::init()?,
-            cache: anymap::AnyMap::new().into(),
-        };
-        Box::leak(Box::new(state))
-    };
+    let state = state::State::new(lt_quiz_core::ir::Config::from_dir(path::config())?, db::init()?);
 
     let args = std::env::args().skip(1).join(" ");
     mk_aggregator(state).perform(args).into_diagnostic()?;

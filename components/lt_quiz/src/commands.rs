@@ -8,7 +8,7 @@ use wca::{Args, Props};
 use crate::state::State;
 use crate::{toml, Result};
 
-pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Props) -> Result {
+pub(crate) fn import_from(state: State, args: Args, _properties: Props) -> Result {
     let mut args = args.0.into_iter();
     wca::parse_args!(args, path: PathBuf);
 
@@ -20,14 +20,14 @@ pub(crate) fn import_from(State { db, .. }: &State, args: Args, _properties: Pro
         ::toml::from_str(&input).into_diagnostic()?
     };
 
-    db.add_questions(questions)
+    state.db.add_questions(questions)
 }
 
-pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, properties: Props) -> Result {
+pub(crate) fn questions_list(state: State, _args: Args, properties: Props) -> Result {
     let has_tags = properties.get_owned("has_tags").unwrap_or_default();
     let no_tags = properties.get_owned("no_tags").unwrap_or_default();
 
-    let questions = db.find_questions(has_tags, no_tags)?;
+    let questions = state.db.find_questions(has_tags, no_tags)?;
 
     for toml::Question { id, description, answer, distractors, .. } in questions {
         let id = id.unwrap();
@@ -40,7 +40,7 @@ pub(crate) fn questions_list(State { db, .. }: &State, _args: Args, properties: 
     Ok(())
 }
 
-pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, properties: Props) -> Result {
+pub(crate) fn questions_about(state: State, _args: Args, properties: Props) -> Result {
     use prettytable::{row, Table};
 
     let has_tags = properties.get_owned("has_tags").unwrap_or_default();
@@ -49,7 +49,7 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, properties:
     let mut table = Table::new();
     let mut rows = Vec::new();
 
-    let questions = db.find_questions(has_tags, no_tags)?;
+    let questions = state.db.find_questions(has_tags, no_tags)?;
     for toml::Question { id, description, answer, distractors, .. } in questions {
         let distractors = distractors.iter().join("\n");
         rows.push(row![id.unwrap(), description, answer, distractors]);
@@ -62,7 +62,7 @@ pub(crate) fn questions_about(State { db, .. }: &State, _args: Args, properties:
     Ok(())
 }
 
-pub(crate) fn questions(state: &State, _args: Args, properties: Props) -> Result {
+pub(crate) fn questions(state: State, _args: Args, properties: Props) -> Result {
     let has_tags = properties.get_owned("has_tags").unwrap_or_default();
     let no_tags = properties.get_owned("no_tags").unwrap_or_default();
 
@@ -72,7 +72,7 @@ pub(crate) fn questions(state: &State, _args: Args, properties: Props) -> Result
     Ok(())
 }
 
-pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: Props) -> Result {
+pub(crate) fn export(state: State, args: Args, properties: Props) -> Result {
     use std::io::Write as _;
     use std::iter::zip;
 
@@ -99,8 +99,8 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
 
     let theme = theme_set
         .themes
-        .get(config.theme.value())
-        .ok_or_else(|| miette::miette!("Canot load the theme: {}", config.theme.value()))?;
+        .get(state.config.theme.value())
+        .ok_or_else(|| miette::miette!("Canot load the theme: {}", state.config.theme.value()))?;
 
     let mut highlight_lines = {
         let rust_syntax = syntax_set.find_syntax_by_extension("rs").unwrap();
@@ -108,7 +108,7 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
         syntect::easy::HighlightLines::new(rust_syntax, theme)
     };
 
-    let questions = db.find_questions(has_tags, no_tags)?;
+    let questions = state.db.find_questions(has_tags, no_tags)?;
     for question in questions {
         for (code, index) in
             zip(stdx::markdown::find_rust_code_blocks(&question.description), 0_usize..)
@@ -129,7 +129,9 @@ pub(crate) fn export(State { db, config, .. }: &State, args: Args, properties: P
     Ok(())
 }
 
-pub(crate) fn config(State { config, .. }: &State, _args: Args, _properties: Props) -> Result {
+pub(crate) fn config(state: State, _args: Args, _properties: Props) -> Result {
+    let config = &state.config;
+
     println!("[{}] Theme: {}", config.theme.kind(), config.theme.value());
 
     Ok(())
