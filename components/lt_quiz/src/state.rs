@@ -4,7 +4,7 @@ use lt_quiz_core::ir;
 
 use crate::{db, toml, Result};
 
-pub(crate) struct StateRaw {
+pub(crate) struct RawState {
     pub(crate) config: ir::Config,
     pub(crate) db: db::Sqlite,
     pub(crate) cache: std::cell::RefCell<anymap::AnyMap>,
@@ -12,12 +12,12 @@ pub(crate) struct StateRaw {
 
 #[derive(Clone)]
 pub(crate) struct State {
-    raw: Rc<StateRaw>,
+    raw: Rc<RawState>,
 }
 
 impl State {
     pub(crate) fn new(config: ir::Config, db: db::Sqlite) -> Self {
-        Self { raw: StateRaw { config, db, cache: anymap::AnyMap::new().into() }.into() }
+        Self { raw: RawState { config, db, cache: anymap::AnyMap::new().into() }.into() }
     }
 
     pub(crate) fn questions(
@@ -40,9 +40,9 @@ impl State {
 }
 
 impl std::ops::Deref for State {
-    type Target = StateRaw;
+    type Target = RawState;
 
-    fn deref(&self) -> &StateRaw {
+    fn deref(&self) -> &RawState {
         &self.raw
     }
 }
