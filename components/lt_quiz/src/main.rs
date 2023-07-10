@@ -14,7 +14,7 @@ use lt_quiz_core::toml;
 pub(crate) use stdx::Result;
 
 fn mk_aggregator(state: &'static state::State) -> wca::CommandsAggregator {
-    use stdx::{cli, CommandExt as _, Property};
+    use wca::stdx::{cli, CommandExt as _, Property};
     use wca::Type;
 
     let list = Type::List(Box::new(Type::String), ',');
