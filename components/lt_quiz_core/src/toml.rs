@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use miette::{IntoDiagnostic as _, WrapErr as _};
+use miette::IntoDiagnostic as _;
 use serde::{Deserialize, Serialize};
 use stdx::Result;
 
@@ -21,15 +21,7 @@ impl Config {
     /// deserialized configuration as a `Result`, transformed into a diagnostic
     /// error if necessary.
     pub fn from_dir(path: PathBuf) -> Result<Self> {
-        use std::io::ErrorKind;
-
-        let input = match std::fs::read_to_string(&path) {
-            Err(err) if err.kind() == ErrorKind::NotFound => Ok(String::new()),
-            input => {
-                input.into_diagnostic().with_context(|| format!("reading `{}`", path.display()))
-            }
-        }?;
-
+        let input = stdx::paths::maybe_read(path)?.unwrap_or_default();
         ::toml::from_str(&input).into_diagnostic()
     }
 }
