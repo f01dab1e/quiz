@@ -7,7 +7,7 @@ edition = "2021"
 workspace = true
 
 [dependencies]
-lazy-regex = "2.5"
+lazy-regex = "3.0"
 wca.workspace = true
 itertools.workspace = true
 lazy_format.workspace = true
