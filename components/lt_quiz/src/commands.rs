@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use itertools::Itertools as _;
 use lt_quiz_core::traits::Database as _;
-use miette::{IntoDiagnostic as _, WrapErr as _};
+use miette::IntoDiagnostic as _;
 use wca::{Args, Props};
 
 use crate::state::State;
@@ -13,9 +13,7 @@ pub(crate) fn import_from(state: State, args: Args, _properties: Props) -> Resul
     wca::parse_args!(args, path: PathBuf);
 
     let questions: toml::Questions = {
-        let input = std::fs::read_to_string(&path)
-            .into_diagnostic()
-            .with_context(|| format!("reading `{}`", path.display()))?;
+        let input = stdx::paths::read(path)?;
 
         ::toml::from_str(&input).into_diagnostic()?
     };
